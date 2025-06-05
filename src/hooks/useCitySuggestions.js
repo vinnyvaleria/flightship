@@ -4,13 +4,15 @@ import { useState, useEffect, useRef } from "react";
 const AIRTABLE_URL = "https://api.airtable.com/v0";
 const BASE_ID = "appE7UVuI3rqrgzNd";
 const TABLE_ID = "tblbmkIeoeKhKbSKt";
+const TOKEN = import.meta.env.VITE_AIRTABLE_TOKEN;
+// console.log("Token is ", TOKEN);
 
 /**
  * Custom hook to fetch city suggestions from Airtable.
  * @param {string} query The search input string
  */
 
-const useCitySuggestions = (token, query) => {
+const useCitySuggestions = (query = "") => {
     const [suggestions, setSuggestions] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -26,7 +28,7 @@ const useCitySuggestions = (token, query) => {
                     `${AIRTABLE_URL}/${BASE_ID}/${TABLE_ID}`,
                     {
                         headers: {
-                            Authorization: `Bearer ${token}`,
+                            Authorization: `Bearer ${TOKEN}`,
                             "Content-Type": "application/json",
                         },
                     }
