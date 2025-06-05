@@ -1,9 +1,14 @@
+import { useState } from "react";
 import FlightsList from "./components/FlightsList/FlightsList";
 import NavBar from "./components/NavBar/NavBar";
 
 import { Route, Routes } from "react-router-dom";
+import FlightsDetails from "./components/FlightsDetails/FlightDetails";
 
 const App = () => {
+    // state variable for list of flights saved based on search
+    const [flights, setFlights] = useState([]);
+
     return (
         <>
             <NavBar />
@@ -17,11 +22,12 @@ const App = () => {
                         </main>
                     }
                 />
+
                 <Route path="/saved-flights" element={<FlightsList />} />
 
                 <Route
                     path="/saved-flights:bookingId"
-                    element={<h1>Saved Flights</h1>}
+                    element={<FlightsDetails />}
                 />
             </Routes>
         </>
