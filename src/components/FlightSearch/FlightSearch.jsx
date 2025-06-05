@@ -1,22 +1,24 @@
-"use client";
+import SearchInput from "../SearchInput/SearchInput";
 
 import { useState } from "react";
 import { Button, Input, Stack, Field } from "@chakra-ui/react";
+import useCitySuggestions from "@/hooks/useCitySuggestions";
 
 const FlightSearch = () => {
     // state variable to store search term
-    const [flightSearchTerm, setFlightSearchTerm] = useState([
-        {
-            bookingId: "",
-            departureDate: "",
-            origin: "",
-            destination: "",
-            apiKey: "",
-        },
-    ]);
+    const [newFlightSearch, setNewFlightSearch] = useState({
+        bookingId: "",
+        departureDate: "",
+        departureCity: "",
+        arrivalCity: "",
+        apiKey: "",
+    });
 
     const handleInputChange = (event) => {
-        setFlightSearchTerm(event.target.value);
+        setNewFlightSearch({
+            ...newFlightSearch,
+            [event.target.name]: event.target.value,
+        });
     };
 
     const handleSubmit = (event) => {
@@ -24,92 +26,79 @@ const FlightSearch = () => {
         event.preventDefault();
 
         // do not store empty input or whitespace
-        if (!flightSearchTerm.trim()) return;
+        if (!newFlightSearch.bookingId.trim() || !newFlightSearch.apiKey.trim())
+            return;
 
-        // reset the newBook state to its initial empty values to clear the form fields, preparing them for the next entry
-        setFlightSearchTerm("");
+        // reset form
+        setNewFlightSearch([
+            {
+                bookingId: "",
+                departureDate: "",
+                departureCity: "",
+                arrivalCity: "",
+                apiKey: "",
+            },
+        ]);
     };
+
+    // fetch suggestions
+    const {
+        suggestions: depSuggestions,
+        loading: depLoading,
+        error: depError,
+    } = useCitySuggestions(newFlightSearch.departureCity);
+
+    const {
+        suggestions: arrSuggestions,
+        loading: arrLoading,
+        error: arrError,
+    } = useCitySuggestions(newFlightSearch.arrivalCity);
 
     return (
         <>
             <form onSubmit={handleSubmit}>
                 <Stack gap="4">
-                    <Field.Root>
-                        <Field.Label>Booking Number</Field.Label>
-                        <Input
-                            id="bookingId"
-                            name="bookingId"
-                            value={flightSearchTerm.bookingId}
-                            onChange={handleInputChange}
-                            variant="subtle"
-                            placeholder="Enter booking number"
-                            required
-                        />
-                        <Field.ErrorText>
-                            This field is required
-                        </Field.ErrorText>
-                    </Field.Root>
-                    <Field.Root>
-                        <Field.Label>Departure date</Field.Label>
-                        <Input
-                            id="departureDate"
-                            name="departureDate"
-                            value={flightSearchTerm.departureDate}
-                            onChange={handleInputChange}
-                            variant="subtle"
-                            type="date"
-                            placeholder="Enter departure date"
-                            required
-                        />
-                        <Field.ErrorText>
-                            This field is required
-                        </Field.ErrorText>
-                    </Field.Root>
-                    <Field.Root>
-                        <Field.Label>Origin City</Field.Label>
-                        <Input
-                            id="origin"
-                            name="origin"
-                            value={flightSearchTerm.origin}
-                            onChange={handleInputChange}
-                            variant="subtle"
-                            placeholder="Enter flight origin"
-                            required
-                        />
-                        <Field.ErrorText>
-                            This field is required
-                        </Field.ErrorText>
-                    </Field.Root>
-                    <Field.Root>
-                        <Field.Label>Destination City</Field.Label>
-                        <Input
-                            id="destination"
-                            name="destination"
-                            value={flightSearchTerm.destination}
-                            onChange={handleInputChange}
-                            variant="subtle"
-                            placeholder="Enter flight destination"
-                            required
-                        />
-                        <Field.ErrorText>
-                            This field is required
-                        </Field.ErrorText>
-                    </Field.Root>
-                    <Field.Root>
-                        <Field.Label>API Key</Field.Label>
-                        <Input
-                            id="apiKey"
-                            name="apiKey"
-                            value={flightSearchTerm.apiKey}
-                            onChange={handleInputChange}
-                            variant="subtle"
-                            placeholder="Enter your api key"
-                            required
-                        />
-                        <Field.ErrorText>
-                            This field is required
-                        </Field.ErrorText>
-                    </Field.Root>
+                    <SearchInput
+                        label="booking number"
+                        name="bookingId"
+                        value={newFlightSearch.bookingId}
+                        onChange={handleInputChange}
+                    />
+
+                    <SearchInput
+                        label="flight date"
+                        name="departureDate"
+                        value={newFlightSearch.departureDate}
+                        onChange={handleInputChange}
+                    />
+
+                    <SearchInput
+                        label="origin city"
+                        name="departureCity"
+                        value={newFlightSearch.departureCity}
+                        onChange={handleInputChange}
+                        suggestions={depSuggestions}
+                        loading={depLoading}
+                        error={depError}
+                    />
+
+                    <SearchInput
+                        label="destination city"
+                        name="arrivalCity"
+                        value={newFlightSearch.arrivalCity}
+                        onChange={handleInputChange}
+                        suggestions={arrSuggestions}
+                        loading={arrLoading}
+                        error={arrError}
+                    />
+
+                    <SearchInput
+                        label="Enter you API Key"
+                        name="apiKey"
+                        value={newFlightSearch.apiKey}
+                        onChange={handleInputChange}
+                    />
+
                     <Button
                         type="submit"
                         bg="bg.subtle"
