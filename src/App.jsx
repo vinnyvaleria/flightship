@@ -4,6 +4,7 @@ import NavBar from "./components/NavBar/NavBar";
 
 import { Route, Routes } from "react-router-dom";
 import FlightsDetails from "./components/FlightsDetails/FlightDetails";
+import FlightSearch from "./components/FlightSearch/FlightSearch";
 
 const App = () => {
     // state variable for list of flights saved based on search
@@ -18,7 +19,7 @@ const App = () => {
                     path="/"
                     element={
                         <main>
-                            <h1>Homepage</h1>
+                            <FlightSearch />
                         </main>
                     }
                 />
