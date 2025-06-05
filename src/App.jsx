@@ -1,3 +1,4 @@
+import FlightsList from "./components/FlightsList/FlightsList";
 import NavBar from "./components/NavBar/NavBar";
 
 import { Route, Routes } from "react-router-dom";
@@ -16,7 +17,7 @@ const App = () => {
                         </main>
                     }
                 />
-                <Route path="/saved-flights" element={<h1>Saved Flights</h1>} />
+                <Route path="/saved-flights" element={<FlightsList />} />
 
                 <Route
                     path="/saved-flights:bookingId"
