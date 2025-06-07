@@ -1,7 +1,10 @@
-import { useState } from "react";
-import { Field, Input } from "@chakra-ui/react";
+// src/components/SearchInput/SearchInput.jsx
+
+// import { useState } from "react";
+import { Field, Input, List, Spinner, Text } from "@chakra-ui/react";
 
 const SearchInput = ({
+    type = "text",
     label,
     name,
     value,
@@ -9,27 +12,62 @@ const SearchInput = ({
     suggestions = [],
     loading,
     error,
+    onSuggestionClick,
+    showSuggestions = true,
 }) => {
-    // only show first 5 matched from the record
-    const [searchSuggestions, setSearchSUggestions] = useState([]);
-
     return (
-        <>
-            <Field.Root>
-                <Field.Label htmlFor={name} textTransform="capitalize">
-                    {label}
-                </Field.Label>
-                <Input
-                    id={name}
-                    name={name}
-                    value={value}
-                    onChange={onChange}
-                    variant="subtle"
-                    required
-                />
-                <Field.ErrorText>This field is required</Field.ErrorText>
-            </Field.Root>
-        </>
+        <Field.Root>
+            <Field.Label htmlFor={name} textTransform="capitalize">
+                {label}
+            </Field.Label>
+            <Input
+                type={type}
+                id={name}
+                name={name}
+                value={value}
+                onChange={onChange}
+                variant="subtle"
+                required
+            />
+
+            {/* loading spinner when fetching data */}
+            {loading && <Spinner size="sm" />}
+
+            {/* to show error message from fetching if any */}
+            {error && <Text color="red.500">{error}</Text>}
+
+            {/* onyly display when suggestions is found */}
+            {suggestions.length > 0 && showSuggestions && (
+                <List.Root
+                    border="1px solid #ccc"
+                    borderRadius="md"
+                    mt={1}
+                    maxHeight="150px"
+                    overflowY="auto"
+                    zIndex="10"
+                    variant="plain"
+                    colorPalette="grey"
+                >
+                    {suggestions.map((city, index) => (
+                        <List.Item
+                            key={index}
+                            padding="8px"
+                            _hover={{
+                                backgroundColor: "gray",
+                                cursor: "pointer",
+                            }}
+                            onMouseDown={() =>
+                                onSuggestionClick &&
+                                onSuggestionClick(city, name)
+                            }
+                        >
+                            {city}
+                        </List.Item>
+                    ))}
+                </List.Root>
+            )}
+            <Field.ErrorText>This field is required</Field.ErrorText>
+        </Field.Root>
     );
 };
 
