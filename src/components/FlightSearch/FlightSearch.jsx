@@ -1,8 +1,10 @@
+// src/components/FlightSearch/FlightSearch.jsx
+
 import SearchInput from "../SearchInput/SearchInput";
+import useCitySuggestions from "@/hooks/useCitySuggestions";
 
 import { useState } from "react";
-import { Button, Input, Stack, Field } from "@chakra-ui/react";
-import useCitySuggestions from "@/hooks/useCitySuggestions";
+import { Button, Stack } from "@chakra-ui/react";
 
 const FlightSearch = () => {
     // state variable to store search term
@@ -14,10 +16,46 @@ const FlightSearch = () => {
         apiKey: "",
     });
 
+    // state to control when to show suggestions
+    const [showSuggestions, setShowSuggestions] = useState({
+        departureCity: true,
+        arrivalCity: true,
+    });
+
     const handleInputChange = (event) => {
+        const { name, value } = event.target;
         setNewFlightSearch({
             ...newFlightSearch,
-            [event.target.name]: event.target.value,
+            [name]: value,
+        });
+
+        // show suggestions when user is typing and has not selected any suggestion
+        if (name === "departureCity" || name === "arrivalCity") {
+            setShowSuggestions((prev) => ({
+                ...prev,
+                [name]: true,
+            }));
+        }
+    };
+
+    // handle when user click on one of the suggestions
+    const handleSuggestionClick = (selectedCity, fieldName) => {
+        // console.log("Before click - showSuggestions:", showSuggestions);
+        // console.log("Selected city:", selectedCity, "Field:", fieldName);
+
+        setNewFlightSearch((prev) => ({
+            ...prev,
+            [fieldName]: selectedCity,
+        }));
+
+        // hide suggestion when one of the lists is clicked
+        setShowSuggestions((prev) => {
+            const newSuggestionState = {
+                ...prev,
+                [fieldName]: false,
+            };
+            // console.log("New showSuggestions state:", newSuggestionState);
+            return newSuggestionState;
         });
     };
 
@@ -30,15 +68,19 @@ const FlightSearch = () => {
             return;
 
         // reset form
-        setNewFlightSearch([
-            {
-                bookingId: "",
-                departureDate: "",
-                departureCity: "",
-                arrivalCity: "",
-                apiKey: "",
-            },
-        ]);
+        setNewFlightSearch({
+            bookingId: "",
+            departureDate: "",
+            departureCity: "",
+            arrivalCity: "",
+            apiKey: "",
+        });
+
+        // reset show suggestion
+        setShowSuggestions({
+            departureCity: true,
+            arrivalCity: true,
+        });
     };
 
     // fetch suggestions
@@ -67,6 +109,7 @@ const FlightSearch = () => {
 
                     <SearchInput
                         label="flight date"
+                        type="date"
                         name="departureDate"
                         value={newFlightSearch.departureDate}
                         onChange={handleInputChange}
@@ -77,9 +120,13 @@ const FlightSearch = () => {
                         name="departureCity"
                         value={newFlightSearch.departureCity}
                         onChange={handleInputChange}
-                        suggestions={depSuggestions}
+                        suggestions={
+                            showSuggestions.departureCity ? depSuggestions : ""
+                        }
                         loading={depLoading}
                         error={depError}
+                        onSuggestionClick={handleSuggestionClick}
+                        showSuggestions={showSuggestions.departureCity}
                     />
 
                     <SearchInput
@@ -87,9 +134,13 @@ const FlightSearch = () => {
                         name="arrivalCity"
                         value={newFlightSearch.arrivalCity}
                         onChange={handleInputChange}
-                        suggestions={arrSuggestions}
+                        suggestions={
+                            showSuggestions.arrivalCity ? arrSuggestions : ""
+                        }
                         loading={arrLoading}
                         error={arrError}
+                        onSuggestionClick={handleSuggestionClick}
+                        showSuggestions={showSuggestions.arrivalCity}
                     />
 
                     <SearchInput
@@ -104,7 +155,6 @@ const FlightSearch = () => {
                         bg="bg.subtle"
                         variant="outline"
                         colorPalette="gray"
-                        required
                     >
                         Submit
                     </Button>
