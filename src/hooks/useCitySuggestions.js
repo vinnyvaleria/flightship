@@ -10,10 +10,10 @@ const TOKEN = import.meta.env.VITE_AIRTABLE_TOKEN;
 
 /**
  * Custom hook to fetch city suggestions from Airtable.
- * @param {string} query The search input string
+ * @param {string} query The city search input string
  */
 
-const useCitySuggestions = (query) => {
+const useCitySuggestions = (query = "") => {
     const [suggestions, setSuggestions] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -56,14 +56,6 @@ const useCitySuggestions = (query) => {
     };
 
     useEffect(() => {
-        // filter suggestions on only when input has more than 2 characters
-        if (query.length < 2) {
-            setSuggestions([]);
-            setLoading(false);
-            setError(null);
-            return;
-        }
-
         const fetchCities = async () => {
             setLoading(true);
             setError(null);
@@ -105,7 +97,7 @@ const useCitySuggestions = (query) => {
     //     "Type:",
     //     Array.isArray(suggestions)
     // );
-    return { suggestions, loading, error };
+    return { suggestions, loading, error, allCities };
 };
 
 export default useCitySuggestions;
