@@ -1,6 +1,5 @@
 // src/components/SearchInput/SearchInput.jsx
 
-// import { useState } from "react";
 import { Field, Input, List, Spinner, Text } from "@chakra-ui/react";
 
 const SearchInput = ({
@@ -27,6 +26,7 @@ const SearchInput = ({
                 value={value}
                 onChange={onChange}
                 variant="subtle"
+                width="500px"
                 required
             />
 
@@ -36,6 +36,7 @@ const SearchInput = ({
             {/* to show error message from fetching if any */}
             {error && <Text color="red.500">{error}</Text>}
 
+            {/* {console.log(suggestions)} */}
             {/* onyly display when suggestions is found */}
             {suggestions.length > 0 && showSuggestions && (
                 <List.Root
@@ -48,9 +49,9 @@ const SearchInput = ({
                     variant="plain"
                     colorPalette="grey"
                 >
-                    {suggestions.map((city, index) => (
+                    {suggestions.map((suggestion) => (
                         <List.Item
-                            key={index}
+                            key={suggestion.id}
                             padding="8px"
                             _hover={{
                                 backgroundColor: "gray",
@@ -58,10 +59,10 @@ const SearchInput = ({
                             }}
                             onMouseDown={() =>
                                 onSuggestionClick &&
-                                onSuggestionClick(city, name)
+                                onSuggestionClick(suggestion, name)
                             }
                         >
-                            {city}
+                            {suggestion.displayText}
                         </List.Item>
                     ))}
                 </List.Root>

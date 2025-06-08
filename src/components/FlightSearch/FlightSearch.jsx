@@ -1,7 +1,7 @@
 // src/components/FlightSearch/FlightSearch.jsx
 
 import SearchInput from "../SearchInput/SearchInput";
-import useCitySuggestions from "@/hooks/useCitySuggestions";
+import useAirportSuggestions from "@/hooks/useAirportSuggestions";
 
 import { useState } from "react";
 import { Button, Stack } from "@chakra-ui/react";
@@ -11,15 +11,17 @@ const FlightSearch = () => {
     const [newFlightSearch, setNewFlightSearch] = useState({
         bookingId: "",
         departureDate: "",
-        departureCity: "",
-        arrivalCity: "",
+        departure: "",
+        departureIATA: "",
+        arrival: "",
+        arrivalIATA: "",
         apiKey: "",
     });
 
     // state to control when to show suggestions
     const [showSuggestions, setShowSuggestions] = useState({
-        departureCity: true,
-        arrivalCity: true,
+        departure: true,
+        arrival: true,
     });
 
     const handleInputChange = (event) => {
@@ -30,7 +32,7 @@ const FlightSearch = () => {
         });
 
         // show suggestions when user is typing and has not selected any suggestion
-        if (name === "departureCity" || name === "arrivalCity") {
+        if (name === "departure" || name === "arrival") {
             setShowSuggestions((prev) => ({
                 ...prev,
                 [name]: true,
@@ -39,13 +41,14 @@ const FlightSearch = () => {
     };
 
     // handle when user click on one of the suggestions
-    const handleSuggestionClick = (selectedCity, fieldName) => {
-        // console.log("Before click - showSuggestions:", showSuggestions);
-        // console.log("Selected city:", selectedCity, "Field:", fieldName);
+    const handleSuggestionClick = (selectedSuggestion, fieldName) => {
+        // Use the displayText from the suggestion object
+        const iata = fieldName === "departure" ? "departureIATA" : "arrivalIATA";
 
         setNewFlightSearch((prev) => ({
             ...prev,
-            [fieldName]: selectedCity,
+            [fieldName]: selectedSuggestion.displayText,
+            [iata]: selectedSuggestion.iataCode,
         }));
 
         // hide suggestion when one of the lists is clicked
@@ -64,37 +67,47 @@ const FlightSearch = () => {
         event.preventDefault();
 
         // do not store empty input or whitespace
-        if (!newFlightSearch.bookingId.trim() || !newFlightSearch.apiKey.trim())
+        if (
+            !newFlightSearch.bookingId.trim() ||
+            !newFlightSearch.apiKey.trim() ||
+            !newFlightSearch.departure.trim() ||
+            !newFlightSearch.arrival.trim() ||
+            !newFlightSearch.departureDate.trim()
+        ) {
+            alert("Please fill in all required fields");
             return;
+        }
 
         // reset form
         setNewFlightSearch({
             bookingId: "",
             departureDate: "",
-            departureCity: "",
-            arrivalCity: "",
+            departure: "",
+            departureIATA: "",
+            arrival: "",
+            arrivalIATA: "",
             apiKey: "",
         });
 
         // reset show suggestion
         setShowSuggestions({
-            departureCity: true,
-            arrivalCity: true,
+            departure: true,
+            arrival: true,
         });
     };
 
     // fetch suggestions
     const {
-        suggestions: depSuggestions,
-        loading: depLoading,
-        error: depError,
-    } = useCitySuggestions(newFlightSearch.departureCity);
+        suggestions: depSuggestions = [],
+        loading: depLoading = false,
+        error: depError = null,
+    } = useAirportSuggestions(newFlightSearch.departure) || {};
 
     const {
-        suggestions: arrSuggestions,
-        loading: arrLoading,
-        error: arrError,
-    } = useCitySuggestions(newFlightSearch.arrivalCity);
+        suggestions: arrSuggestions = [],
+        loading: arrLoading = false,
+        error: arrError = null,
+    } = useAirportSuggestions(newFlightSearch.arrival) || {};
 
     return (
         <>
@@ -116,31 +129,31 @@ const FlightSearch = () => {
                     />
 
                     <SearchInput
-                        label="origin city"
-                        name="departureCity"
-                        value={newFlightSearch.departureCity}
+                        label="origin"
+                        name="departure"
+                        value={newFlightSearch.departure}
                         onChange={handleInputChange}
                         suggestions={
-                            showSuggestions.departureCity ? depSuggestions : ""
+                            showSuggestions.departure ? depSuggestions : ""
                         }
                         loading={depLoading}
                         error={depError}
                         onSuggestionClick={handleSuggestionClick}
-                        showSuggestions={showSuggestions.departureCity}
+                        showSuggestions={showSuggestions.departure}
                     />
 
                     <SearchInput
-                        label="destination city"
-                        name="arrivalCity"
-                        value={newFlightSearch.arrivalCity}
+                        label="destination"
+                        name="arrival"
+                        value={newFlightSearch.arrival}
                         onChange={handleInputChange}
                         suggestions={
-                            showSuggestions.arrivalCity ? arrSuggestions : ""
+                            showSuggestions.arrival ? arrSuggestions : ""
                         }
                         loading={arrLoading}
                         error={arrError}
                         onSuggestionClick={handleSuggestionClick}
-                        showSuggestions={showSuggestions.arrivalCity}
+                        showSuggestions={showSuggestions.arrival}
                     />
 
                     <SearchInput
