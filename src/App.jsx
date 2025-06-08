@@ -2,13 +2,14 @@
 
 import NavBar from "./components/NavBar/NavBar";
 
-import FlightsList from "./components/FlightsList/FlightsList";
-import FlightsDetails from "./components/FlightsDetails/FlightDetails";
-import FlightSearch from "./components/FlightSearch/FlightSearch";
+import FlightSearch from "./components/Flights/FlightSearch";
+import FlightsList from "./components/Flights/FlightsList";
+import SavedFlightsList from "./components/Flights/SavedFlightsList";
+import FlightsDetails from "./components/Flights/FlightDetails";
 
 import * as flightScheduledService from "./services/flightScheduleService";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 
 const App = () => {
@@ -58,11 +59,14 @@ const App = () => {
                     element={
                         <main>
                             <FlightSearch fetch={fetchFlightsData} />
+                            {displayedFlights && (
+                                <FlightsList flights={displayedFlights} />
+                            )}
                         </main>
                     }
                 />
 
-                <Route path="/saved-flights" element={<FlightsList />} />
+                <Route path="/saved-flights" element={<SavedFlightsList />} />
 
                 <Route
                     path="/saved-flights:bookingId"

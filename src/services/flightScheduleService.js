@@ -1,4 +1,4 @@
-// src/services/flightApi.js
+// src/services/flightScheduleService.js
 
 const BASE_URL = "https://google-flights2.p.rapidapi.com/api/v1";
 const SEARCH_ID = "searchFlights";
