@@ -4,9 +4,9 @@ import SearchInput from "../SearchInput/SearchInput";
 import useAirportSuggestions from "@/hooks/useAirportSuggestions";
 
 import { useState } from "react";
-import { Button, Stack } from "@chakra-ui/react";
+import { Button, Stack, Text } from "@chakra-ui/react";
 
-const FlightSearch = () => {
+const FlightSearch = ({ fetch }) => {
     // state variable to store search term
     const [newFlightSearch, setNewFlightSearch] = useState({
         bookingId: "",
@@ -24,12 +24,19 @@ const FlightSearch = () => {
         arrival: true,
     });
 
+    // add loading and error states
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitError, setSubmitError] = useState(null);
+
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setNewFlightSearch({
             ...newFlightSearch,
             [name]: value,
         });
+
+        // clear error when user starts typing
+        if (submitError) setSubmitError(null);
 
         // show suggestions when user is typing and has not selected any suggestion
         if (name === "departure" || name === "arrival") {
@@ -43,7 +50,8 @@ const FlightSearch = () => {
     // handle when user click on one of the suggestions
     const handleSuggestionClick = (selectedSuggestion, fieldName) => {
         // Use the displayText from the suggestion object
-        const iata = fieldName === "departure" ? "departureIATA" : "arrivalIATA";
+        const iata =
+            fieldName === "departure" ? "departureIATA" : "arrivalIATA";
 
         setNewFlightSearch((prev) => ({
             ...prev,
@@ -62,9 +70,15 @@ const FlightSearch = () => {
         });
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         // stopping the default form submission action
         event.preventDefault();
+
+        // prevent multiple submissions
+        if (isSubmitting) return;
+
+        // clear any previous error
+        setSubmitError(null);
 
         // do not store empty input or whitespace
         if (
@@ -74,26 +88,45 @@ const FlightSearch = () => {
             !newFlightSearch.arrival.trim() ||
             !newFlightSearch.departureDate.trim()
         ) {
-            alert("Please fill in all required fields");
+            setSubmitError("Please fill in all required fields");
             return;
         }
 
-        // reset form
-        setNewFlightSearch({
-            bookingId: "",
-            departureDate: "",
-            departure: "",
-            departureIATA: "",
-            arrival: "",
-            arrivalIATA: "",
-            apiKey: "",
-        });
+        // set the current submit state after previous checks
+        setIsSubmitting(true);
 
-        // reset show suggestion
-        setShowSuggestions({
-            departure: true,
-            arrival: true,
-        });
+        try {
+            // fetch data on submit - await the result
+            const fetchData = await fetch(newFlightSearch);
+
+            if (fetchData.success) {
+                // reset form - on success
+                setNewFlightSearch({
+                    bookingId: "",
+                    departureDate: "",
+                    departure: "",
+                    departureIATA: "",
+                    arrival: "",
+                    arrivalIATA: "",
+                    apiKey: "",
+                });
+
+                // reset show suggestion - on success
+                setShowSuggestions({
+                    departure: true,
+                    arrival: true,
+                });
+            } else {
+                // set the error message received
+                setSubmitError(fetchData.error);
+            }
+        } catch (err) {
+            // handle unexpected errors
+            setSubmitError(err.message || "An unexpected error occurred");
+        } finally {
+            // once all cases are handled
+            setIsSubmitting(false);
+        }
     };
 
     // fetch suggestions
@@ -168,9 +201,14 @@ const FlightSearch = () => {
                         bg="bg.subtle"
                         variant="outline"
                         colorPalette="gray"
+                        loading={isSubmitting}
+                        disabled={isSubmitting}
                     >
-                        Submit
+                        {isSubmitting ? "Searching Flights..." : "Submit"}
                     </Button>
+
+                    {/* error text below button if fetch fails */}
+                    {submitError && <Text color="red.500">{submitError}</Text>}
                 </Stack>
             </form>
         </>
