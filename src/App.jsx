@@ -30,6 +30,15 @@ const App = () => {
     });
     // store submitted search
     const [submittedSearchData, setSubmittedSearchData] = useState(null);
+    const temporaryFormData = {
+        bookingId: "ABC321",
+        departureDate: "2025-06-26",
+        departure: "Singapore - Singapore Changi Airport (SIN)",
+        departureIATA: "SIN",
+        arrival: "Sydney - Sydney Kingsford Smith International Airport (SYD)",
+        arrivalIATA: "SYD",
+        apiKey: "This is test only",
+    };
 
     // since API is fetch asynchronously, display Loading if needed
     const [fLoading, setFLoading] = useState(true);
@@ -94,8 +103,8 @@ const App = () => {
                             {/* <FlightsList searchFormData={submittedSearchData} /> */}
                             {displayedFlights && (
                                 <FlightsList
-                                    flights={displayedFlights}
-                                    searchFormData={submittedSearchData}
+                                    // flights={displayedFlights}
+                                    searchFormData={temporaryFormData}
                                 />
                             )}
                         </main>
