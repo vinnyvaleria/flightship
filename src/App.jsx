@@ -5,7 +5,7 @@ import NavBar from "./components/NavBar/NavBar";
 import FlightSearch from "./components/Flights/FlightSearch";
 import FlightsList from "./components/Flights/FlightsList";
 import SavedFlightsList from "./components/Flights/SavedFlightsList";
-import FlightsDetails from "./components/Flights/FlightDetails";
+import FlightsDetails from "./components/Flights/FlightCard";
 
 import * as flightScheduledService from "./services/flightScheduleService";
 

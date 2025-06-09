@@ -1,7 +1,7 @@
 // src/components/Flights/FlightsList.jsx
 
 import { SimpleGrid } from "@chakra-ui/react";
-import FlightsDetails from "./FlightDetails";
+import FlightsDetails from "./FlightCard";
 
 import flights from "@/data/flights.json";
 
@@ -16,7 +16,7 @@ const FlightsList = () => {
     return (
         <>
             <p>{allFlights.length} flights found.</p>
-            <SimpleGrid columns={{ base: 1, md: 2 }} gap="30px">
+            <SimpleGrid columns={{ base: 1, md: 2 }} gap={6}>
                 {allFlights.map((flight, id) => (
                     <FlightsDetails
                         key={flight.booking_token || id}

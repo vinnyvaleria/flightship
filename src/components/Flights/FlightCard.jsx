@@ -2,7 +2,7 @@
 
 import { Card, Avatar, Button, Text, Badge, Flex, Box } from "@chakra-ui/react";
 
-const FlightDetails = ({ flightData }) => {
+const FlightCard = ({ flightData }) => {
     // function to format time
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleTimeString
     const formatTime = (timeString) => {
@@ -212,4 +212,4 @@ const FlightDetails = ({ flightData }) => {
     );
 };
 
-export default FlightDetails;
+export default FlightCard;
