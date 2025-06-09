@@ -59,9 +59,9 @@ const App = () => {
                     element={
                         <main>
                             <FlightSearch fetch={fetchFlightsData} />
-                            {displayedFlights && (
-                                <FlightsList flights={displayedFlights} />
-                            )}
+                            <FlightsList />
+                            {/* {displayedFlights && (
+                                <FlightsList flights={displayedFlights} /> */}
                         </main>
                     }
                 />
