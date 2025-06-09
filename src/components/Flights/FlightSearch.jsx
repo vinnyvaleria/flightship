@@ -89,17 +89,6 @@ const FlightSearch = ({ newFlightSearch, setNewFlightSearch, fetch }) => {
             const fetchData = await fetch(newFlightSearch);
 
             if (fetchData.success) {
-                // reset form - on success
-                setNewFlightSearch({
-                    bookingId: "",
-                    departureDate: "",
-                    departure: "",
-                    departureIATA: "",
-                    arrival: "",
-                    arrivalIATA: "",
-                    apiKey: "",
-                });
-
                 // reset show suggestion - on success
                 setShowSuggestions({
                     departure: true,

@@ -28,6 +28,8 @@ const App = () => {
         arrivalIATA: "",
         apiKey: "",
     });
+    // store submitted search
+    const [submittedSearchData, setSubmittedSearchData] = useState(null);
 
     // since API is fetch asynchronously, display Loading if needed
     const [fLoading, setFLoading] = useState(true);
@@ -47,6 +49,20 @@ const App = () => {
             setFlightsData(fData);
             setDisplayedFlights(fData);
             setFLoading(false);
+
+            // save submitted search data only when fetch is successful
+            setSubmittedSearchData(formData);
+
+            // reset form - on success
+            setNewFlightSearch({
+                bookingId: "",
+                departureDate: "",
+                departure: "",
+                departureIATA: "",
+                arrival: "",
+                arrivalIATA: "",
+                apiKey: "",
+            });
 
             // return success for status check at flight search submission
             return { success: true };
@@ -75,7 +91,7 @@ const App = () => {
                                 setNewFlightSearch={setNewFlightSearch}
                                 fetch={fetchFlightsData}
                             />
-                            <FlightsList />
+                            <FlightsList searchFormData={submittedSearchData} />
                             {/* {displayedFlights && (
                                 <FlightsList flights={displayedFlights} /> */}
                         </main>
