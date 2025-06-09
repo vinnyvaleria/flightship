@@ -91,9 +91,13 @@ const App = () => {
                                 setNewFlightSearch={setNewFlightSearch}
                                 fetch={fetchFlightsData}
                             />
-                            <FlightsList searchFormData={submittedSearchData} />
-                            {/* {displayedFlights && (
-                                <FlightsList flights={displayedFlights} /> */}
+                            {/* <FlightsList searchFormData={submittedSearchData} /> */}
+                            {displayedFlights && (
+                                <FlightsList
+                                    flights={displayedFlights}
+                                    searchFormData={submittedSearchData}
+                                />
+                            )}
                         </main>
                     }
                 />
