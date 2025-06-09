@@ -79,7 +79,7 @@ const useAirportSuggestions = (query) => {
 
     useEffect(() => {
         // filter suggestions on only when input has more than 2 characters
-        if (query.length < 2) {
+        if (query?.length < 2) {
             setSuggestions([]);
             setLoading(false);
             setError(null);
@@ -194,7 +194,7 @@ const useAirportSuggestions = (query) => {
     }, [query, allCities]);
 
     // console.log("Suggestions:", suggestions);
-    return { suggestions, loading, error };
+    return { suggestions, loading, error, allAirports };
 };
 
 export default useAirportSuggestions;
