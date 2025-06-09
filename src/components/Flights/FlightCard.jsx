@@ -1,8 +1,8 @@
 // src/components/Flights/FlightCard.jsx
 
-import { Card, Avatar, Button, Text, Badge, Flex, Box } from "@chakra-ui/react";
+import { Card, Avatar, Button, Text, Flex, Box } from "@chakra-ui/react";
 
-const FlightCard = ({ flightData }) => {
+const FlightCard = ({ flightData, onSaveFlight }) => {
     // function to format time
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleTimeString
     const formatTime = (timeString) => {
@@ -204,7 +204,11 @@ const FlightCard = ({ flightData }) => {
                 borderTop="1px solid"
                 borderColor="gray.800"
             >
-                <Button variant="outline" size="sm">
+                <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => onSaveFlight(flightData)}
+                >
                     Save Flight
                 </Button>
             </Card.Footer>
