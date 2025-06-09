@@ -1,4 +1,4 @@
-// src/components/FlightSearch/FlightSearch.jsx
+// src/components/Flights/FlightSearch.jsx
 
 import SearchInput from "../SearchInput/SearchInput";
 import useAirportSuggestions from "@/hooks/useAirportSuggestions";

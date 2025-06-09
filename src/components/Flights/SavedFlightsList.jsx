@@ -1,3 +1,5 @@
+// src/components/Flights/SavedFlightSearch.jsx
+
 const SavedFlightsList = () => {
     return <h1>Saved Flights</h1>;
 };

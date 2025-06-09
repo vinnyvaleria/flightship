@@ -1,4 +1,4 @@
-// src/components/Flights/FlightDetails.jsx
+// src/components/Flights/FlightCard.jsx
 
 import { Card, Avatar, Button, Text, Badge, Flex, Box } from "@chakra-ui/react";
 
