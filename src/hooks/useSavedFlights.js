@@ -1,3 +1,5 @@
+// src/hooks/useSavedFlights.js
+
 import { useState } from "react";
 import useAirportSuggestions from "./useAirportSuggestions";
 
@@ -11,7 +13,7 @@ const TOKEN = import.meta.env.VITE_AIRTABLE_TOKEN;
  * @param {Array} searchFormData The search form data as array
  */
 
-const useSaveFlight = (searchFormData) => {
+const useSavedFlights = (searchFormData) => {
     // use Set to prevent duplicates
     // if we use normal array, will need to check manually every time
     const [savedFlights, setSavedFlights] = useState(new Set());
@@ -26,11 +28,27 @@ const useSaveFlight = (searchFormData) => {
         return date.toISOString().split("T")[0]; // ISO short format
     };
 
+    // split booking id generation as a separate function
+    const generateBookingId = () => {
+        return `${searchFormData?.bookingId}_${searchFormData?.departureIATA}_${searchFormData?.arrivalIATA}`;
+    };
+
+    // check if the booking id and itinerary submitted is duplicated
+    const isDuplicateBookingId = () => {
+        const id = generateBookingId();
+        return Array.from(savedFlights).some((savedId) => savedId.includes(id));
+    };
+
     const saveFlight = async (flightData) => {
         // use the available booking token from API return
         const flightId = flightData.booking_token;
 
-        if (savedFlights.has(flightId) || savingFlights.has(flightId)) return;
+        if (
+            savedFlights.has(flightId) ||
+            savingFlights.has(flightId) ||
+            isDuplicateBookingId()
+        )
+            return;
 
         setSavingFlights((prev) => new Set(prev).add(flightId));
 
@@ -42,7 +60,7 @@ const useSaveFlight = (searchFormData) => {
             const saveRecord = {
                 fields: {
                     // based on form data
-                    bookingID: `${searchFormData?.bookingId}_${searchFormData?.departureIATA}_${searchFormData?.arrivalIATA}`,
+                    bookingID: generateBookingId(),
                     dep: [
                         (
                             allAirports.current.find(
@@ -130,7 +148,8 @@ const useSaveFlight = (searchFormData) => {
         saveFlight,
         savedFlights,
         savingFlights,
+        isDuplicateBookingId,
     };
 };
 
-export default useSaveFlight;
+export default useSavedFlights;
