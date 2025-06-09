@@ -6,18 +6,7 @@ import useAirportSuggestions from "@/hooks/useAirportSuggestions";
 import { useState } from "react";
 import { Button, Stack, Text } from "@chakra-ui/react";
 
-const FlightSearch = ({ fetch }) => {
-    // state variable to store search term
-    const [newFlightSearch, setNewFlightSearch] = useState({
-        bookingId: "",
-        departureDate: "",
-        departure: "",
-        departureIATA: "",
-        arrival: "",
-        arrivalIATA: "",
-        apiKey: "",
-    });
-
+const FlightSearch = ({ newFlightSearch, setNewFlightSearch, fetch }) => {
     // state to control when to show suggestions
     const [showSuggestions, setShowSuggestions] = useState({
         departure: true,

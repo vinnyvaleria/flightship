@@ -16,6 +16,18 @@ const App = () => {
     // state variable for list of flights saved based on search
     const [flightsData, setFlightsData] = useState([]);
     const [displayedFlights, setDisplayedFlights] = useState([]);
+    const [savedFlights, setSavedFlights] = useState([]);
+
+    // state variable to store search term
+    const [newFlightSearch, setNewFlightSearch] = useState({
+        bookingId: "",
+        departureDate: "",
+        departure: "",
+        departureIATA: "",
+        arrival: "",
+        arrivalIATA: "",
+        apiKey: "",
+    });
 
     // since API is fetch asynchronously, display Loading if needed
     const [fLoading, setFLoading] = useState(true);
@@ -58,7 +70,11 @@ const App = () => {
                     path="/"
                     element={
                         <main>
-                            <FlightSearch fetch={fetchFlightsData} />
+                            <FlightSearch
+                                newFlightSearch={newFlightSearch}
+                                setNewFlightSearch={setNewFlightSearch}
+                                fetch={fetchFlightsData}
+                            />
                             <FlightsList />
                             {/* {displayedFlights && (
                                 <FlightsList flights={displayedFlights} /> */}
