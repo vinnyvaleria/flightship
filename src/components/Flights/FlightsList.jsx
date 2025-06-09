@@ -21,8 +21,13 @@ const FlightsList = ({ searchFormData }) => {
     }
 
     // use the save flight hook to post data
-    const { saveFlight, savedFlights, savingFlights, isDuplicateBookingId } =
-        useSavedFlights(searchFormData) || {};
+    const {
+        saveFlight,
+        savedFlights,
+        savingFlights,
+        error,
+        isDuplicateBookingId,
+    } = useSavedFlights(searchFormData) || {};
 
     return (
         <>
@@ -41,6 +46,7 @@ const FlightsList = ({ searchFormData }) => {
                             isLoading={isLoading}
                             isSaved={isSaved}
                             isDuplicated={isDuplicateBookingId}
+                            error={error}
                         />
                     );
                 })}

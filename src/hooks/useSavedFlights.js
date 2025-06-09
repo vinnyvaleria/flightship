@@ -14,7 +14,8 @@ const TOKEN = import.meta.env.VITE_AIRTABLE_TOKEN;
  */
 
 const useSavedFlights = (searchFormData) => {
-    // use Set to prevent duplicates
+    const [error, setError] = useState(null);
+
     // if we use normal array, will need to check manually every time
     const [savedFlights, setSavedFlights] = useState(new Set());
     const [savingFlights, setSavingFlights] = useState(new Set());
@@ -36,7 +37,13 @@ const useSavedFlights = (searchFormData) => {
     // check if the booking id and itinerary submitted is duplicated
     const isDuplicateBookingId = () => {
         const id = generateBookingId();
-        return Array.from(savedFlights).some((savedId) => savedId.includes(id));
+        const isDuplicated = Array.from(savedFlights).some((savedId) =>
+            savedId.includes(id)
+        );
+
+        if (isDuplicated) setError("There is an existing record found!");
+
+        return isDuplicated;
     };
 
     const saveFlight = async (flightData) => {
@@ -133,8 +140,7 @@ const useSavedFlights = (searchFormData) => {
 
             setSavedFlights((prev) => new Set(prev).add(flightId));
         } catch (err) {
-            console.error("Error saving flight:", err);
-            alert(`Error saving flight: ${err.message}`);
+            setError(err.message);
         } finally {
             setSavingFlights((prev) => {
                 const updated = new Set(prev);
@@ -148,7 +154,7 @@ const useSavedFlights = (searchFormData) => {
         saveFlight,
         savedFlights,
         savingFlights,
-        isDuplicateBookingId,
+        error,
     };
 };
 
