@@ -1,6 +1,6 @@
 // src/hooks/useAirportSuggestions.js
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import useCitySuggestions from "./useCitySuggestions";
 
 const AIRTABLE_URL = "https://api.airtable.com/v0";
@@ -18,62 +18,41 @@ const useAirportSuggestions = (query) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    // store aiports records at once
-    const allAirports = useRef([]);
-    const { allCities } = useCitySuggestions();
-
-    // function to fetch all pages of records from airtable
-    const fetchAllAirports = async () => {
+    // function to fetch filtered airports on server-side with airtable api
+    const fetchFilteredAirports = async () => {
         let allRecords = [];
-        let offset;
 
         try {
-            do {
-                // expand the city data from airport table returns as the data is linked in airtable
-                // hence response will only show the record ID if not expanded
-                const url = offset
-                    ? `${AIRTABLE_URL}/${BASE_ID}/${TABLE_ID}?offset=${offset}`
-                    : `${AIRTABLE_URL}/${BASE_ID}/${TABLE_ID}`;
+            // create filter formula for searching across multiple fields
+            // this is case insensitive so we no longer need to use toLowerCase
+            // https://www.youtube.com/watch?v=mlhwsGuF4QU
+            const filterFormula = `OR(SEARCH("${query}", {iata}), SEARCH("${query}", {name}), SEARCH("${query}", ARRAYJOIN({city}, ",")))`;
 
-                const res = await fetch(url, {
-                    headers: {
-                        Authorization: `Bearer ${TOKEN}`,
-                        "Content-Type": "application/json",
-                    },
-                });
+            // properly encodes special characters if any with URLSearchParams
+            const params = new URLSearchParams({
+                filterByFormula: filterFormula,
+                maxRecords: "8", // limit results to 8
+            });
 
-                if (!res.ok) throw new Error("Failed to fetch airports.");
+            // expand the city data from airport table returns as the data is linked in airtable
+            // hence response will only show the record ID if not expanded
+            const url = `${AIRTABLE_URL}/${BASE_ID}/${TABLE_ID}?${params}`;
 
-                const data = await res.json();
-                // console.log("Data:", data);
+            const res = await fetch(url, {
+                headers: {
+                    Authorization: `Bearer ${TOKEN}`,
+                    "Content-Type": "application/json",
+                },
+            });
 
-                allRecords = allRecords.concat(data.records);
-                offset = data.offset;
-            } while (offset);
-            return allRecords;
+            if (!res.ok) throw new Error("Failed to fetch airports.");
+
+            const data = await res.json();
+            // console.log("Data:", data);
+            return data;
         } catch (err) {
             setError(err.message);
             return [];
-        }
-    };
-
-    // get the city name by record id
-    const getCityById = (id) => {
-        try {
-            if (!allCities?.current || !Array.isArray(allCities.current)) {
-                console.log(
-                    "allCities.current is not available:",
-                    allCities?.current
-                );
-                return null;
-            }
-            const cityObject = allCities.current.find(
-                (city) => city?.id === id
-            );
-            return cityObject?.fields?.city || null;
-        } catch (error) {
-            console.error("Error in getCityById:", error, "ID:", id);
-            return null;
         }
     };
 
@@ -91,84 +70,19 @@ const useAirportSuggestions = (query) => {
             setError(null);
 
             try {
-                // fetch only if the data storage is empty
-                if (allAirports.current.length === 0) {
-                    allAirports.current = await fetchAllAirports();
-                }
-
-                // console.log("All cities: ", allCities);
-
-                // search through both city names and airport names
-                const matched = allAirports.current
-                    .filter((record) => {
-                        // ensure record and fields exist
-                        if (!record?.fields) return false;
-
-                        // check if city field exists and is an array before accessing [0]
-                        const cityField = record.fields.city;
-                        // console.log(
-                        //     "Processing record:",
-                        //     record.id,
-                        //     "cityField:",
-                        //     cityField
-                        // );
-
-                        if (
-                            !cityField ||
-                            !Array.isArray(cityField) ||
-                            cityField.length === 0
-                        ) {
-                            // skip records without valid city data but don't return false
-                            // allow matching by airport name and IATA code only
-                            const airportName = record.fields.name || "";
-                            const iataCode = record.fields.iata || "";
-
-                            return (
-                                airportName
-                                    .toLowerCase()
-                                    .includes(query.toLowerCase()) ||
-                                iataCode
-                                    .toLowerCase()
-                                    .includes(query.toLowerCase())
-                            );
-                        }
-
-                        const cityId = cityField[0];
-                        const cityName = cityId
-                            ? getCityById(cityId) || ""
-                            : "";
-                        const airportName = record.fields.name || "";
-                        const iataCode = record.fields.iata || "";
-
-                        const match =
-                            cityName
-                                .toLowerCase()
-                                .includes(query.toLowerCase()) ||
-                            airportName
-                                .toLowerCase()
-                                .includes(query.toLowerCase()) ||
-                            iataCode
-                                .toLowerCase()
-                                .includes(query.toLowerCase());
-
-                        return match;
-                    })
-                    .slice(0, 8); // limit to 8 matches
+                // Use server-side filtering instead of client-side
+                const matched = await fetchFilteredAirports();
 
                 setSuggestions(
                     matched.map((record) => {
                         // check if city field exists and is an array before accessing [0]
                         const cityField = record.fields.city;
-                        const cityId =
+                        const cityName =
                             cityField &&
                             Array.isArray(cityField) &&
                             cityField.length > 0
                                 ? cityField[0]
                                 : null;
-
-                        const cityName = cityId
-                            ? getCityById(cityId) || "Unknown City"
-                            : "Unknown City";
 
                         return {
                             id: record.id,
@@ -191,10 +105,10 @@ const useAirportSuggestions = (query) => {
             }
         };
         fetchAirports();
-    }, [query, allCities]);
+    }, [query]);
 
     // console.log("Suggestions:", suggestions);
-    return { suggestions, loading, error, allAirports };
+    return { suggestions, loading, error };
 };
 
 export default useAirportSuggestions;
