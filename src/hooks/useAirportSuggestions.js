@@ -1,7 +1,6 @@
 // src/hooks/useAirportSuggestions.js
 
 import { useState, useEffect } from "react";
-import useCitySuggestions from "./useCitySuggestions";
 
 const AIRTABLE_URL = "https://api.airtable.com/v0";
 const BASE_ID = "appE7UVuI3rqrgzNd";
@@ -20,8 +19,6 @@ const useAirportSuggestions = (query) => {
 
     // function to fetch filtered airports on server-side with airtable api
     const fetchFilteredAirports = async () => {
-        let allRecords = [];
-
         try {
             // create filter formula for searching across multiple fields
             // this is case insensitive so we no longer need to use toLowerCase
