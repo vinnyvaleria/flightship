@@ -1,0 +1,5 @@
+- display savedFlights (include button in FlightCard for update message and delete card)
+- make sure duplicated bookingId not posted 
+- display flight details (embed map and weather API)
+- clean up documentation and presentation
+- styling fixes
