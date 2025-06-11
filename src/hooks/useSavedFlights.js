@@ -1,7 +1,8 @@
 // src/hooks/useSavedFlights.js
 
+import getAirportByIATA from "@/utils/getAirportByIATA";
+
 import { useState } from "react";
-import useAirportSuggestions from "./useAirportSuggestions";
 
 const AIRTABLE_URL = "https://api.airtable.com/v0";
 const BASE_ID = "appE7UVuI3rqrgzNd";
@@ -19,9 +20,6 @@ const useSavedFlights = (searchFormData) => {
     // if we use normal array, will need to check manually every time
     const [savedFlights, setSavedFlights] = useState(new Set());
     const [savingFlights, setSavingFlights] = useState(new Set());
-
-    // retrieve airport record id to store in saved flights
-    const { allAirports } = useAirportSuggestions();
 
     // function to convert date to iso format
     const formatDate = (timeString) => {
@@ -64,28 +62,23 @@ const useSavedFlights = (searchFormData) => {
             // this refers to last item and will be needed especially if there are layovers
             const lastFlight = flightData.flights.at(-1);
 
+            // get airport details by IATA
+            const depAirport = await getAirportByIATA(
+                flightInfo.departure_airport.airport_code
+            );
+            console.log("Departure Airport", depAirport);
+
+            const arrAirport = await getAirportByIATA(
+                lastFlight.arrival_airport.airport_code
+            );
+            console.log("Arrival Airport", arrAirport);
+
             const saveRecord = {
                 fields: {
                     // based on form data
                     bookingID: generateBookingId(),
-                    dep: [
-                        (
-                            allAirports.current.find(
-                                (airport) =>
-                                    airport.fields.iata ===
-                                    flightInfo.departure_airport.airport_code
-                            ) || {}
-                        ).id,
-                    ],
-                    arr: [
-                        (
-                            allAirports.current.find(
-                                (airport) =>
-                                    airport.fields.iata ===
-                                    lastFlight.arrival_airport.airport_code
-                            ) || {}
-                        ).id,
-                    ],
+                    dep: [depAirport.id],
+                    arr: [arrAirport.id],
 
                     // based on api response and displayed
                     airline: flightInfo.airline,
@@ -135,6 +128,7 @@ const useSavedFlights = (searchFormData) => {
 
             if (!res.ok) {
                 const errorData = await res.json();
+                console.error("Airtable Error:", errorData);
                 throw new Error(`Airtable Error: ${errorData.error?.message}`);
             }
 
