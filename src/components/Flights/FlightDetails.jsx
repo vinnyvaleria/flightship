@@ -71,6 +71,18 @@ const FlightDetails = () => {
         return allCoordinates;
     };
 
+    // when flight is deleted, go back to saved flights
+    const handleDelete = async () => {
+        if (flightDetail && deleteFlight) {
+            await deleteFlight(flightDetail.booking_id);
+            navigate("/saved-flights");
+        }
+    };
+
+    const handleBack = () => {
+        navigate("/saved-flights");
+    };
+
     useEffect(() => {
         if (getFlights) {
             getFlights();
@@ -94,18 +106,6 @@ const FlightDetails = () => {
             loadMap();
         }
     }, [flightRecords, booking_id]); // dependent to flight records state and booking_id
-
-    // when flight is deleted, go back to saved flights
-    const handleDelete = async () => {
-        if (flightDetail && deleteFlight) {
-            await deleteFlight(flightDetail.booking_id);
-            navigate("/saved-flights");
-        }
-    };
-
-    const handleBack = () => {
-        navigate("/saved-flights");
-    };
 
     if (loading) return <Text>Loading...</Text>;
     if (error) return <Text color="red.500">{error}</Text>;
