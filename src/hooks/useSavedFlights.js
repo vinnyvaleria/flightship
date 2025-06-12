@@ -3,6 +3,7 @@
 import getAirportByIATA from "@/utils/getAirportByIATA";
 
 import { useState } from "react";
+import useSavedFlightsContext from "./useSavedFlightsContext";
 
 const AIRTABLE_URL = "https://api.airtable.com/v0";
 const BASE_ID = "appE7UVuI3rqrgzNd";
@@ -15,11 +16,15 @@ const TOKEN = import.meta.env.VITE_AIRTABLE_TOKEN;
  */
 
 const useSavedFlights = (searchFormData) => {
-    const [error, setError] = useState(null);
-
-    // if we use normal array, will need to check manually every time
-    const [savedFlights, setSavedFlights] = useState(new Set());
-    const [savingFlights, setSavingFlights] = useState(new Set());
+    // get state from context
+    const {
+        savedFlights,
+        setSavedFlights,
+        savingFlights,
+        setSavingFlights,
+        error,
+        setError,
+    } = useSavedFlightsContext();
 
     // function to convert date to iso format
     const formatDate = (timeString) => {
@@ -145,10 +150,11 @@ const useSavedFlights = (searchFormData) => {
     };
 
     return {
-        saveFlight,
         savedFlights,
         savingFlights,
         error,
+        saveFlight,
+        isDuplicateBookingId,
     };
 };
 
