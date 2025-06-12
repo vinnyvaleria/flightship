@@ -11,6 +11,7 @@ const FlightCard = ({
     onDeleteFlight,
     isLoading = false,
     isSaved = false,
+    isDeleted,
     error = false,
 }) => {
     // store the list of flights

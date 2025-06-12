@@ -247,6 +247,13 @@ const useSavedFlights = (searchFormData) => {
             }
         } catch (err) {
             setError(err.message);
+        } finally {
+            // always stop loading state
+            setDeletingFlights((prev) => {
+                const updated = new Set(prev);
+                updated.delete(recordId);
+                return updated;
+            });
         }
 
         // console.log("Flight Records :", flightRecords);

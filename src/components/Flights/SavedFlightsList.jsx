@@ -42,7 +42,8 @@ const SavedFlightsList = ({ searchFormData }) => {
             <SimpleGrid columns={{ base: 1, md: 2 }} gap={6}>
                 {flightsToRender.map((flight, id) => {
                     const flightId = flight.booking_id || id;
-                    const isLoading = deletingFlights.has(flightId);
+                    const isLoading = flightId && deletingFlights.has(flightId);
+                    const isDeleted = false;
 
                     return (
                         <FlightCard
@@ -50,6 +51,7 @@ const SavedFlightsList = ({ searchFormData }) => {
                             flightData={flight}
                             onDeleteFlight={deleteFlight}
                             isLoading={isLoading}
+                            isDeleted={isDeleted}
                             error={error}
                         />
                     );
