@@ -1,6 +1,7 @@
 // src/utils/getMapDisplay.js
 
 import Leaflet from "leaflet";
+import getArrows from "./getArrows";
 
 // L.map(<HTMLElement> el, <Map options> options?)
 // coordinates = [latitude, longitude]
@@ -22,14 +23,11 @@ const getMapDisplay = (mapElementId, coordinates = []) => {
 
     // used to load and display tile layers on the map
     // https://leafletjs.com/reference.html#tilelayer-option
-    Leaflet.tileLayer(
-        "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-        {
-            attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
-            subdomains: "abcd",
-            maxZoom: 10,
-        }
-    ).addTo(map);
+    Leaflet.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution:
+            '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 10,
+    }).addTo(map);
 
     if (coordinates.length > 0) {
         // add map markers
@@ -39,8 +37,13 @@ const getMapDisplay = (mapElementId, coordinates = []) => {
 
         // draw polyline (route)
         const routeLine = Leaflet.polyline(coordinates, {
-            color: "pink",
+            color: "purple",
         }).addTo(map);
+
+        // draw 5 arrows per line
+        Leaflet.featureGroup(getArrows(coordinates, "purple", 5, map)).addTo(
+            map
+        );
         map.fitBounds(routeLine.getBounds());
     }
 
