@@ -2,11 +2,11 @@
 
 import FlightCard from "./FlightCard";
 import useSavedFlights from "@/hooks/useSavedFlights";
+import formatDataStructure from "@/utils/formatDataStructure";
 
 import flights from "@/data/flights.json";
 
 import { SimpleGrid, Text } from "@chakra-ui/react";
-import formatDataStructure from "@/utils/formatDataStructure";
 
 const FlightsList = ({ searchFormData }) => {
     // initialize allFlights as an empty array by default
@@ -15,7 +15,7 @@ const FlightsList = ({ searchFormData }) => {
     allFlights = formatDataStructure(flights);
 
     // use the save flight hook to post data
-    const { savedFlights, savingFlights, saveFlight, error } =
+    const { savedFlights, savingFlights, error, saveFlight } =
         useSavedFlights(searchFormData) || {};
 
     return (
