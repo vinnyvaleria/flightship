@@ -9,7 +9,7 @@ const getAirportByIATA = async (iata) => {
     // if empty, return none
     if (!iata) return null;
 
-    const url = `${AIRTABLE_URL}/${BASE_ID}/${TABLE_ID}?$SEARCH(${iata}, iata)`;
+    const url = `${AIRTABLE_URL}/${BASE_ID}/${TABLE_ID}?filterByFormula=SEARCH("${iata}", iata)`;
 
     try {
         const res = await fetch(url, {
@@ -23,6 +23,7 @@ const getAirportByIATA = async (iata) => {
 
         const data = await res.json();
 
+        // console.log("getAirportByIATA data:", data);
         // since iata is the primary field, only need the first item
         return data.records[0] || null;
     } catch (error) {
