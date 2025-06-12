@@ -6,17 +6,25 @@ const SavedFlightsContext = createContext();
 
 const SavedFlightsProvider = ({ children }) => {
     // Lifted saved flights states (from useSavedFlights hook)
+    const [flightRecords, setFlightRecords] = useState([]);
     const [savedFlights, setSavedFlights] = useState(new Set());
     const [savingFlights, setSavingFlights] = useState(new Set());
+
+    // state for processing
     const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const value = {
+        flightRecords,
+        setFlightRecords,
         savedFlights,
         setSavedFlights,
         savingFlights,
         setSavingFlights,
         error,
         setError,
+        loading,
+        setLoading,
     };
 
     return (

@@ -18,12 +18,16 @@ const TOKEN = import.meta.env.VITE_AIRTABLE_TOKEN;
 const useSavedFlights = (searchFormData) => {
     // get state from context
     const {
+        flightRecords,
+        setFlightRecords,
         savedFlights,
         setSavedFlights,
         savingFlights,
         setSavingFlights,
         error,
         setError,
+        loading,
+        setLoading,
     } = useSavedFlightsContext();
 
     // split booking id generation as a separate function
@@ -53,7 +57,7 @@ const useSavedFlights = (searchFormData) => {
 
             if (airtableData.records.length > 0) {
                 setError(
-                    "There is an existing record found in with the same bookingID and routes!"
+                    "There is an existing record found in with the same booking_id and routes!"
                 );
                 return true;
             }
@@ -66,6 +70,36 @@ const useSavedFlights = (searchFormData) => {
         return false;
     };
 
+    // fetch existing records in Saved Flights table
+    const getFlights = async () => {
+        setLoading(true);
+        setError(null);
+
+        try {
+            const url = `${AIRTABLE_URL}/${BASE_ID}/${TABLE_ID}`;
+
+            const res = await fetch(url, {
+                headers: {
+                    Authorization: `Bearer ${TOKEN}`,
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (!res.ok) throw new Error("Failed to fetch saved flights.");
+
+            const data = await res.json();
+            // console.log("Saved Flights data :", data);
+
+            setFlightRecords(data);
+            return data;
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // function to save flight upon button click on flight card
     const saveFlight = async (flightData) => {
         // clear existing errors
         setError(null);
@@ -100,12 +134,14 @@ const useSavedFlights = (searchFormData) => {
             const saveRecord = {
                 fields: {
                     // based on form data
-                    bookingID: generateBookingId(),
+                    booking_id: generateBookingId(),
+                    booking_token: flightData.booking_token,
                     dep: [depAirport.id],
                     arr: [arrAirport.id],
 
                     // based on api response and displayed
                     airline: flightInfo.airline,
+                    airline_logo: flightInfo.airline_logo,
                     flight_numbers: JSON.stringify(
                         flightData.flights.map((flight) => ({
                             flightNumber: flight.flight_number,
@@ -175,9 +211,12 @@ const useSavedFlights = (searchFormData) => {
     };
 
     return {
+        flightRecords,
         savedFlights,
         savingFlights,
         error,
+        loading,
+        getFlights,
         saveFlight,
     };
 };
