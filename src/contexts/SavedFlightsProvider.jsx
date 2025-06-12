@@ -1,15 +1,23 @@
 // src/contexts/SavedFlightsProvider.jsx
-import { createContext } from "react";
-import useSavedFlights from "../hooks/useSavedFlights";
+import { createContext, useState } from "react";
 
 // create context for saved flights state
 const SavedFlightsContext = createContext();
 
-const SavedFlightsProvider = ({ children, searchFormData }) => {
-    const savedFlightsHook = useSavedFlights(searchFormData);
+const SavedFlightsProvider = ({ children }) => {
+    // Lifted saved flights states (from useSavedFlights hook)
+    const [savedFlights, setSavedFlights] = useState(new Set());
+    const [savingFlights, setSavingFlights] = useState(new Set());
+
+    const value = {
+        savedFlights,
+        setSavedFlights,
+        savingFlights,
+        setSavingFlights,
+    };
 
     return (
-        <SavedFlightsContext.Provider value={savedFlightsHook}>
+        <SavedFlightsContext.Provider value={value}>
             {children}
         </SavedFlightsContext.Provider>
     );
