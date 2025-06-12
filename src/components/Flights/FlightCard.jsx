@@ -2,7 +2,14 @@
 
 import { Card, Avatar, Button, Text, Flex, Box } from "@chakra-ui/react";
 
-const FlightCard = ({ flightData, onSaveFlight }) => {
+const FlightCard = ({
+    flightData,
+    onSaveFlight,
+    isLoading = false,
+    isSaved = false,
+    isDuplicated = false,
+    error = false,
+}) => {
     // function to format time
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleTimeString
     const formatTime = (timeString) => {
@@ -33,7 +40,7 @@ const FlightCard = ({ flightData, onSaveFlight }) => {
     const hasLayover = flightData.layovers && flightData.layovers.length > 0;
 
     return (
-        <Card.Root variant="elevated" minW="500px" maxW="600px">
+        <Card.Root variant="elevated" w="500px">
             <Card.Body p="6">
                 {/* Airline Header */}
                 <Flex align="center" gap="3" mb="6">
@@ -171,6 +178,9 @@ const FlightCard = ({ flightData, onSaveFlight }) => {
                             </Text>
                         </Box>
                     </Flex>
+                    
+                    {/* to show error message from fetching if any */}
+                    {error && <Text color="red.500">{error}</Text>}
 
                     {/* Layover Info */}
                     {hasLayover && (
@@ -208,6 +218,10 @@ const FlightCard = ({ flightData, onSaveFlight }) => {
                     variant="outline"
                     size="sm"
                     onClick={() => onSaveFlight(flightData)}
+                    loading={isLoading}
+                    loadingText="Saving..."
+                    disabled={isSaved}
+                    cursor={isSaved ? "not-allowed" : "pointer"}
                 >
                     Save Flight
                 </Button>
