@@ -1,12 +1,12 @@
 // src/App.jsx
 
 import NavBar from "./components/NavBar/NavBar";
-
 import FlightSearch from "./components/Flights/FlightSearch";
 import FlightsList from "./components/Flights/FlightsList";
 import SavedFlightsList from "./components/Flights/SavedFlightsList";
 import FlightDetails from "./components/Flights/FlightDetails";
 import SavedFlightsProvider from "./contexts/SavedFlightsProvider";
+import WeatherProvider from "./contexts/WeatherProvider";
 
 import * as flightScheduledService from "./services/flightScheduleService";
 
@@ -92,39 +92,41 @@ const App = () => {
     return (
         <>
             <NavBar />
-            <SavedFlightsProvider>
-                <Routes>
-                    <Route
-                        path="/"
-                        element={
-                            <main>
-                                <FlightSearch
-                                    newFlightSearch={newFlightSearch}
-                                    setNewFlightSearch={setNewFlightSearch}
-                                    fetch={fetchFlightsData}
-                                />
-                                {displayedFlights && (
-                                    <FlightsList
-                                        flights={displayedFlights}
-                                        searchFormData={temporaryFormData}
-                                        // searchFormData={submittedSearchData}
+            <WeatherProvider>
+                <SavedFlightsProvider>
+                    <Routes>
+                        <Route
+                            path="/"
+                            element={
+                                <main>
+                                    <FlightSearch
+                                        newFlightSearch={newFlightSearch}
+                                        setNewFlightSearch={setNewFlightSearch}
+                                        fetch={fetchFlightsData}
                                     />
-                                )}
-                            </main>
-                        }
-                    />
+                                    {displayedFlights && (
+                                        <FlightsList
+                                            flights={displayedFlights}
+                                            searchFormData={temporaryFormData}
+                                            // searchFormData={submittedSearchData}
+                                        />
+                                    )}
+                                </main>
+                            }
+                        />
 
-                    <Route
-                        path="/saved-flights"
-                        element={<SavedFlightsList />}
-                    />
+                        <Route
+                            path="/saved-flights"
+                            element={<SavedFlightsList />}
+                        />
 
-                    <Route
-                        path="/saved-flights/:booking_id"
-                        element={<FlightDetails />}
-                    />
-                </Routes>
-            </SavedFlightsProvider>
+                        <Route
+                            path="/saved-flights/:booking_id"
+                            element={<FlightDetails />}
+                        />
+                    </Routes>
+                </SavedFlightsProvider>
+            </WeatherProvider>
         </>
     );
 };
