@@ -7,7 +7,7 @@ import getSavedFlightByID from "@/utils/getSavedFlightByID";
 import formatDataStructure from "@/utils/formatDataStructure";
 import getMapDisplay from "@/utils/getMapDisplay";
 
-import { Box, Button, Text, Badge } from "@chakra-ui/react";
+import { Box, Button, Text, Badge, Flex } from "@chakra-ui/react";
 
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
@@ -29,7 +29,6 @@ const FlightDetails = () => {
 
     // retrieve coordinates of all flights within the route
     const retrieveCoordinates = async () => {
-        let layoverCoordinates;
         let allCoordinates = [];
 
         const data = await getSavedFlightByID(booking_id);
@@ -37,37 +36,36 @@ const FlightDetails = () => {
         // console.log("getSavedFLightByID data:", flightData);
 
         const departure = await getAirportByIATA(flightData.fields.dep_iata);
-        const depCoordinates = [
+        allCoordinates.push([
             departure.fields.latitude,
             departure.fields.longtitude,
-        ];
-        // console.log("Departure Coordinates :", depCoordinates);
-        allCoordinates.push(depCoordinates);
+        ]);
 
         if (flightData.fields.hasLayover) {
-            JSON.parse(flightData.fields.layover_details).map(
-                async (layover) => {
+            const layoverDetails = JSON.parse(
+                flightData.fields.layover_details
+            );
+
+            await Promise.all(
+                layoverDetails.map(async (layover) => {
                     const temp = await getAirportByIATA(layover.airportCode);
                     // console.log("Tempory constant for layover :", temp);
 
-                    layoverCoordinates = [
+                    allCoordinates.push([
                         temp.fields.latitude,
                         temp.fields.longtitude,
-                    ];
-                    // console.log("Layover coordinates :", layoverCoordinates);
-                    allCoordinates.push(layoverCoordinates);
-                }
+                    ]);
+                })
             );
         }
 
         const arrival = await getAirportByIATA(flightData.fields.arr_iata);
-        const arrCoordinates = [
+        allCoordinates.push([
             arrival.fields.latitude,
             arrival.fields.longtitude,
-        ];
+        ]);
         // console.log("Arrival Coordinates :", arrCoordinates);
 
-        allCoordinates.push(arrCoordinates);
         // console.log("All coordinates array :", allCoordinates);
 
         return allCoordinates;
@@ -90,7 +88,7 @@ const FlightDetails = () => {
             // console.log("Flight detail state:", flightDetail);
 
             const loadMap = async () => {
-                const allCoordinates = retrieveCoordinates();
+                const allCoordinates = await retrieveCoordinates();
                 getMapDisplay(mapRef.current, allCoordinates);
             };
             loadMap();
@@ -135,13 +133,14 @@ const FlightDetails = () => {
                 {flightDetail.booking_id}
             </Badge>
 
-            <Box
+            <Flex
                 id="flightMap"
                 ref={mapRef}
                 bg="gray.100"
+                borderRadius="6px"
                 height="500px"
-                width="800px"
-            ></Box>
+                width="100%"
+            ></Flex>
 
             <FlightCard
                 flightData={flightDetail}
