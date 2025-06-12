@@ -7,7 +7,7 @@ import formatDataStructure from "@/utils/formatDataStructure";
 import { SimpleGrid, Text } from "@chakra-ui/react";
 import { useEffect } from "react";
 
-const SavedFlightsList = ({ searchFormData }) => {
+const SavedFlightsList = () => {
     // use the save flight hook to get data
     const {
         flightRecords,
@@ -16,7 +16,7 @@ const SavedFlightsList = ({ searchFormData }) => {
         loading,
         getFlights,
         deleteFlight,
-    } = useSavedFlights(searchFormData) || {};
+    } = useSavedFlights() || {};
 
     const allFlights = formatDataStructure(flightRecords);
 

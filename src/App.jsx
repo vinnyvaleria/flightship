@@ -103,11 +103,11 @@ const App = () => {
                                     setNewFlightSearch={setNewFlightSearch}
                                     fetch={fetchFlightsData}
                                 />
-                                {/* <FlightsList searchFormData={submittedSearchData} /> */}
                                 {displayedFlights && (
                                     <FlightsList
-                                        // flights={displayedFlights}
+                                        flights={displayedFlights}
                                         searchFormData={temporaryFormData}
+                                        // searchFormData={submittedSearchData}
                                     />
                                 )}
                             </main>
@@ -116,11 +116,7 @@ const App = () => {
 
                     <Route
                         path="/saved-flights"
-                        element={
-                            <SavedFlightsList
-                                searchFormData={temporaryFormData}
-                            />
-                        }
+                        element={<SavedFlightsList />}
                     />
 
                     <Route
