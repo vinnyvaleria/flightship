@@ -3,7 +3,7 @@
 import formatDate from "@/utils/formatDate";
 import formatTimeToString from "@/utils/formatTimetoString";
 
-import { Card, Avatar, Button, Text, Flex, Box } from "@chakra-ui/react";
+import { Card, Avatar, Button, Text, Flex, Box, Badge } from "@chakra-ui/react";
 
 const FlightCard = ({
     flightData,
@@ -23,6 +23,21 @@ const FlightCard = ({
     return (
         <Card.Root variant="elevated" w="500px">
             <Card.Body p="6">
+                {/* Booking id */}
+                {flightData.booking_id && (
+                    <Box>
+                        <Badge
+                            colorPalette="pink"
+                            size="lg"
+                            w="fit-content"
+                            minW="100px"
+                            mb={3}
+                        >
+                            {flightData.booking_id}
+                        </Badge>
+                    </Box>
+                )}
+
                 {/* Airline Header */}
                 <Flex align="center" gap="3" mb="6">
                     <Avatar.Root size="md" shape="rounded">
@@ -140,14 +155,10 @@ const FlightCard = ({
                                 )}
                             </Text>
                             <Text fontSize="sm" fontWeight="medium" mb="1">
-                                {
-                                    lastFlight.arrival_airport.airport_code
-                                }
+                                {lastFlight.arrival_airport.airport_code}
                             </Text>
                             <Text fontSize="xs" color="gray.600" mb="1">
-                                {
-                                    lastFlight.arrival_airport.airport_name
-                                }
+                                {lastFlight.arrival_airport.airport_name}
                             </Text>
                             <Text fontSize="xs" color="gray.500">
                                 {formatDate(
