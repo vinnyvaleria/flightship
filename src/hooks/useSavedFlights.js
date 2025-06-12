@@ -1,9 +1,9 @@
 // src/hooks/useSavedFlights.js
 
-import getAirportByIATA from "@/utils/getAirportByIATA";
-
-import { useState } from "react";
 import useSavedFlightsContext from "./useSavedFlightsContext";
+import formatDate from "@/utils/formatDate";
+import getAirportByIATA from "@/utils/getAirportByIATA";
+import getSavedFlightByID from "@/utils/getSavedFlightByID";
 
 const AIRTABLE_URL = "https://api.airtable.com/v0";
 const BASE_ID = "appE7UVuI3rqrgzNd";
@@ -26,43 +26,62 @@ const useSavedFlights = (searchFormData) => {
         setError,
     } = useSavedFlightsContext();
 
-    // function to convert date to iso format
-    const formatDate = (timeString) => {
-        const date = new Date(timeString);
-        return date.toISOString().split("T")[0]; // ISO short format
-    };
-
     // split booking id generation as a separate function
     const generateBookingId = () => {
         return `${searchFormData?.bookingId}_${searchFormData?.departureIATA}_${searchFormData?.arrivalIATA}`;
     };
 
     // check if the booking id and itinerary submitted is duplicated
-    const isDuplicateBookingId = () => {
-        const id = generateBookingId();
-        const isDuplicated = Array.from(savedFlights).some((savedId) =>
-            savedId.includes(id)
+    const isDuplicateBookingId = async () => {
+        const bookingID = generateBookingId();
+
+        // check for any local duplicates
+        // technically this is not required since button is disabled after save
+        const isLocalDuplicated = Array.from(savedFlights).some((savedId) =>
+            savedId.includes(bookingID)
         );
 
-        if (isDuplicated) setError("There is an existing record found!");
+        if (isLocalDuplicated) {
+            setError("There is an existing record found locally!");
+            return true;
+        }
 
-        return isDuplicated;
+        // check in airtable if bookingID exists
+        try {
+            // console.log("bookingID :", bookingID);
+            let airtableData = await getSavedFlightByID(bookingID);
+
+            if (airtableData.records.length > 0) {
+                setError(
+                    "There is an existing record found in with the same bookingID and routes!"
+                );
+                return true;
+            }
+        } catch (err) {
+            setError("Error checking for duplicate records: " + err.message);
+            return true;
+        }
+
+        // if none of the conditions met
+        return false;
     };
 
     const saveFlight = async (flightData) => {
+        // clear existing errors
+        setError(null);
+
         // use the available booking token from API return
         const flightId = flightData.booking_token;
 
-        if (
-            savedFlights.has(flightId) ||
-            savingFlights.has(flightId) ||
-            isDuplicateBookingId()
-        )
-            return;
+        if (savedFlights.has(flightId) || savingFlights.has(flightId)) return;
 
         setSavingFlights((prev) => new Set(prev).add(flightId));
 
         try {
+            // check for any duplicates
+            const isDuplicate = await isDuplicateBookingId();
+            if (isDuplicate) return;
+
             const flightInfo = flightData.flights[0];
             // this refers to last item and will be needed especially if there are layovers
             const lastFlight = flightData.flights.at(-1);
@@ -71,12 +90,12 @@ const useSavedFlights = (searchFormData) => {
             const depAirport = await getAirportByIATA(
                 flightInfo.departure_airport.airport_code
             );
-            console.log("Departure Airport", depAirport);
+            // console.log("Departure Airport", depAirport);
 
             const arrAirport = await getAirportByIATA(
                 lastFlight.arrival_airport.airport_code
             );
-            console.log("Arrival Airport", arrAirport);
+            // console.log("Arrival Airport", arrAirport);
 
             const saveRecord = {
                 fields: {
@@ -94,9 +113,15 @@ const useSavedFlights = (searchFormData) => {
                         }))
                     ),
 
-                    dep_date: formatDate(flightInfo.departure_airport.time),
+                    dep_date: formatDate(
+                        flightInfo.departure_airport.time,
+                        "iso"
+                    ),
                     dep_time: flightInfo.departure_airport.time,
-                    arr_date: formatDate(lastFlight.arrival_airport.time),
+                    arr_date: formatDate(
+                        lastFlight.arrival_airport.time,
+                        "iso"
+                    ),
                     arr_time: lastFlight.arrival_airport.time,
                     duration: flightData.duration.text,
 
@@ -154,7 +179,6 @@ const useSavedFlights = (searchFormData) => {
         savingFlights,
         error,
         saveFlight,
-        isDuplicateBookingId,
     };
 };
 
