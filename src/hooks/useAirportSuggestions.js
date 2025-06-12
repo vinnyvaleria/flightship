@@ -60,7 +60,7 @@ const useAirportSuggestions = (query) => {
                 if (!res.ok) throw new Error("Failed to fetch airports.");
 
                 const data = await res.json();
-                console.log("Data :", data);
+                console.log("Airport data :", data);
 
                 const matched = data.records.map((record) => {
                     // check if city field exists and is an array before accessing [0]

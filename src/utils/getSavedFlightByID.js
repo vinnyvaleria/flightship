@@ -20,12 +20,12 @@ const getSavedFlightByID = async (bookingID) => {
         });
 
         if (!res.ok)
-            throw new Error("Failed to fetch saved flight by bookingID.");
+            throw new Error("Failed to fetch saved flight by booking_id.");
 
         const data = await res.json();
 
         // console.log("getSavedFlightByID data:", data.records.length, data);
-        // since bookingID is the primary field, only need the first item
+        // since booking_id is the primary field, only need the first item
         return data;
     } catch (error) {
         console.error("getSavedFlightByID error:", error);
