@@ -12,8 +12,9 @@ const FlightCard = ({
     isSaved = false,
     error = false,
 }) => {
-    // store the list of topFlights
+    // store the list of flights
     const flightInfo = flightData.flights[0];
+    const lastFlight = flightData.flights[flightData.flights.length - 1];
 
     // display details of layovers if any
     const isDirect = flightData.stops === 0;
@@ -135,30 +136,22 @@ const FlightCard = ({
                         <Box textAlign="right" flex="1">
                             <Text fontSize="2xl" fontWeight="bold" mb="1">
                                 {formatTimeToString(
-                                    flightData.flights[
-                                        flightData.flights.length - 1
-                                    ].arrival_airport.time
+                                    lastFlight.arrival_airport.time
                                 )}
                             </Text>
                             <Text fontSize="sm" fontWeight="medium" mb="1">
                                 {
-                                    flightData.flights[
-                                        flightData.flights.length - 1
-                                    ].arrival_airport.airport_code
+                                    lastFlight.arrival_airport.airport_code
                                 }
                             </Text>
                             <Text fontSize="xs" color="gray.600" mb="1">
                                 {
-                                    flightData.flights[
-                                        flightData.flights.length - 1
-                                    ].arrival_airport.airport_name
+                                    lastFlight.arrival_airport.airport_name
                                 }
                             </Text>
                             <Text fontSize="xs" color="gray.500">
                                 {formatDate(
-                                    flightData.flights[
-                                        flightData.flights.length - 1
-                                    ].arrival_airport.time,
+                                    lastFlight.arrival_airport.time,
                                     "string"
                                 )}
                             </Text>
