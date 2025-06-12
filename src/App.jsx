@@ -5,13 +5,13 @@ import NavBar from "./components/NavBar/NavBar";
 import FlightSearch from "./components/Flights/FlightSearch";
 import FlightsList from "./components/Flights/FlightsList";
 import SavedFlightsList from "./components/Flights/SavedFlightsList";
-import FlightsDetails from "./components/Flights/FlightCard";
+import FlightDetails from "./components/Flights/FlightDetails";
+import SavedFlightsProvider from "./contexts/SavedFlightsProvider";
 
 import * as flightScheduledService from "./services/flightScheduleService";
 
 import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
-import SavedFlightsProvider from "./contexts/SavedFlightsProvider";
 
 const App = () => {
     // state variable for list of flights saved based on search
@@ -32,7 +32,7 @@ const App = () => {
     // store submitted search
     const [submittedSearchData, setSubmittedSearchData] = useState(null);
     const temporaryFormData = {
-        bookingId: "HADEH",
+        bookingId: "BEI233",
         departureDate: "2025-06-26",
         departure: "Singapore - Singapore Changi Airport (SIN)",
         departureIATA: "SIN",
@@ -114,12 +114,16 @@ const App = () => {
 
                     <Route
                         path="/saved-flights"
-                        element={<SavedFlightsList />}
+                        element={
+                            <SavedFlightsList
+                                searchFormData={temporaryFormData}
+                            />
+                        }
                     />
 
                     <Route
-                        path="/saved-flights:bookingId"
-                        element={<FlightsDetails />}
+                        path="/saved-flights/:booking_id"
+                        element={<FlightDetails />}
                     />
                 </Routes>
             </SavedFlightsProvider>

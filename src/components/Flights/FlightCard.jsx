@@ -4,6 +4,7 @@ import formatDate from "@/utils/formatDate";
 import formatTimeToString from "@/utils/formatTimetoString";
 
 import { Card, Avatar, Button, Text, Flex, Box, Badge } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 const FlightCard = ({
     flightData,
@@ -11,8 +12,9 @@ const FlightCard = ({
     onDeleteFlight,
     isLoading = false,
     isSaved = false,
-    isDeleted,
+    isDeleted = false,
     error = false,
+    custom = false,
 }) => {
     // store the list of flights
     const flightInfo = flightData.flights[0];
@@ -22,22 +24,29 @@ const FlightCard = ({
     const isDirect = flightData.stops === 0;
     const hasLayover = flightData.layovers && flightData.layovers.length > 0;
 
+    const navigate = useNavigate();
+
+    const handleViewMore = () => {
+        const bookingId = flightData.booking_id;
+        if (bookingId) {
+            navigate(`/saved-flights/${bookingId}`);
+        }
+    };
+
     return (
-        <Card.Root variant="elevated" w="500px">
+        <Card.Root variant="elevated" w={custom ? "unset" : "500px"}>
             <Card.Body p="6">
                 {/* Booking id */}
-                {flightData.booking_id && (
-                    <Box>
-                        <Badge
-                            colorPalette="pink"
-                            size="lg"
-                            w="fit-content"
-                            minW="100px"
-                            mb={3}
-                        >
-                            {flightData.booking_id}
-                        </Badge>
-                    </Box>
+                {flightData.booking_id && !custom && (
+                    <Badge
+                        colorPalette="pink"
+                        size="lg"
+                        w="fit-content"
+                        minW="100px"
+                        mb={3}
+                    >
+                        {flightData.booking_id}
+                    </Badge>
                 )}
 
                 {/* Airline Header */}
@@ -202,6 +211,7 @@ const FlightCard = ({
                 borderColor="gray.800"
                 display="block"
             >
+                {/*  Action buttons */}
                 <Flex justifyContent="flex-end" alignItems="center">
                     {onSaveFlight && (
                         <Button
@@ -219,17 +229,31 @@ const FlightCard = ({
                         </Button>
                     )}
                     {onDeleteFlight && (
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() =>
-                                onDeleteFlight(flightData.booking_id)
-                            }
-                            loading={isLoading}
-                            loadingText="Deleting..."
-                        >
-                            Delete Flight
-                        </Button>
+                        <Flex gap={3}>
+                            {!custom && (
+                                <Button
+                                    variant="surface"
+                                    size="sm"
+                                    colorPalette="pink"
+                                    onClick={handleViewMore}
+                                >
+                                    View More
+                                </Button>
+                            )}
+
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() =>
+                                    onDeleteFlight(flightData.booking_id)
+                                }
+                                loading={isLoading}
+                                disabled={isDeleted || error}
+                                loadingText="Deleting..."
+                            >
+                                Delete Flight
+                            </Button>
+                        </Flex>
                     )}
                 </Flex>
             </Card.Footer>
