@@ -13,6 +13,8 @@ import * as flightScheduledService from "./services/flightScheduleService";
 import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 
+import "./App.css";
+
 const App = () => {
     // state variable for list of flights saved based on search
     const [flightsData, setFlightsData] = useState([]);

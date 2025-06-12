@@ -1,6 +1,15 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+body {
+    width: 80%;
+}
+
+.arrow-icon {
+    width: 14px;
+    height: 14px;
+}
+
+.arrow-icon > div {
+    margin-left: -1px;
+    margin-top: -3px;
+    transform-origin: center center;
+    font: 12px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
