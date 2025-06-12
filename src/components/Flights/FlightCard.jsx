@@ -1,5 +1,8 @@
 // src/components/Flights/FlightCard.jsx
 
+import formatDate from "@/utils/formatDate";
+import formatTimeToString from "@/utils/formatTimetoString";
+
 import { Card, Avatar, Button, Text, Flex, Box } from "@chakra-ui/react";
 
 const FlightCard = ({
@@ -7,31 +10,8 @@ const FlightCard = ({
     onSaveFlight,
     isLoading = false,
     isSaved = false,
-    isDuplicated = false,
     error = false,
 }) => {
-    // function to format time
-    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleTimeString
-    const formatTime = (timeString) => {
-        const date = new Date(timeString);
-        return date.toLocaleTimeString("en-US", {
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: true,
-        });
-    };
-
-    // function to format date
-    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleDateString
-    const formatDate = (timeString) => {
-        const date = new Date(timeString);
-        return date.toLocaleDateString("en-US", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-        });
-    };
-
     // store the list of topFlights
     const flightInfo = flightData.flights[0];
 
@@ -69,7 +49,9 @@ const FlightCard = ({
                         {/* Departure Info */}
                         <Box textAlign="left" flex="1">
                             <Text fontSize="2xl" fontWeight="bold" mb="1">
-                                {formatTime(flightInfo.departure_airport.time)}
+                                {formatTimeToString(
+                                    flightInfo.departure_airport.time
+                                )}
                             </Text>
                             <Text fontSize="sm" fontWeight="medium" mb="1">
                                 {flightInfo.departure_airport.airport_code}
@@ -78,7 +60,10 @@ const FlightCard = ({
                                 {flightInfo.departure_airport.airport_name}
                             </Text>
                             <Text fontSize="xs" color="gray.500">
-                                {formatDate(flightInfo.departure_airport.time)}
+                                {formatDate(
+                                    flightInfo.departure_airport.time,
+                                    "string"
+                                )}
                             </Text>
                         </Box>
 
@@ -149,7 +134,7 @@ const FlightCard = ({
                         {/* Arrival Info */}
                         <Box textAlign="right" flex="1">
                             <Text fontSize="2xl" fontWeight="bold" mb="1">
-                                {formatTime(
+                                {formatTimeToString(
                                     flightData.flights[
                                         flightData.flights.length - 1
                                     ].arrival_airport.time
@@ -173,14 +158,12 @@ const FlightCard = ({
                                 {formatDate(
                                     flightData.flights[
                                         flightData.flights.length - 1
-                                    ].arrival_airport.time
+                                    ].arrival_airport.time,
+                                    "string"
                                 )}
                             </Text>
                         </Box>
                     </Flex>
-                    
-                    {/* to show error message from fetching if any */}
-                    {error && <Text color="red.500">{error}</Text>}
 
                     {/* Layover Info */}
                     {hasLayover && (
@@ -208,23 +191,24 @@ const FlightCard = ({
             </Card.Body>
 
             <Card.Footer
-                justifyContent="flex-end"
-                alignItems="center"
                 pt="4"
                 borderTop="1px solid"
                 borderColor="gray.800"
+                display="block"
             >
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => onSaveFlight(flightData)}
-                    loading={isLoading}
-                    loadingText="Saving..."
-                    disabled={isSaved}
-                    cursor={isSaved ? "not-allowed" : "pointer"}
-                >
-                    Save Flight
-                </Button>
+                <Flex justifyContent="flex-end" alignItems="center">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => onSaveFlight(flightData)}
+                        loading={isLoading}
+                        loadingText="Saving..."
+                        disabled={isSaved || error}
+                        cursor={isSaved || error ? "not-allowed" : "pointer"}
+                    >
+                        Save Flight
+                    </Button>
+                </Flex>
             </Card.Footer>
         </Card.Root>
     );
