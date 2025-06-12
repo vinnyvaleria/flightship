@@ -14,7 +14,7 @@ const formatDataStructure = (flightData) => {
         const allFlights = flightData.records.map((record) =>
             transformAirtableData(record)
         );
-        console.log("Format Airtable data :", allFlights);
+        // console.log("Format Airtable data :", allFlights);
 
         return allFlights;
     }
@@ -34,7 +34,7 @@ const formatDataStructure = (flightData) => {
 
     // data structure already transformed
     if (flightData.flights && Array.isArray(flightData.flights)) {
-        console.log("No format required :", [flightData]);
+        // console.log("No format required :", [flightData]);
         return [flightData]; // Already normalized
     }
 
