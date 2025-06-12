@@ -1,4 +1,4 @@
-// src/services/futureWeatherService.js
+// src/services/realtimeWeatherService.js
 
 const BASE_URL = "https://api.tomorrow.io/v4";
 const SEARCH_ID = "weather/realtime";
@@ -19,3 +19,5 @@ const show = async (location) => {
     const data = await res.json();
     return data;
 };
+
+export { show };
