@@ -1,0 +1,32 @@
+{
+    "data": {
+        "time": "2025-06-12T16:09:00Z",
+        "values": {
+            "cloudBase": 2,
+            "cloudCeiling": 6.7,
+            "cloudCover": 100,
+            "dewPoint": 6.9,
+            "freezingRainIntensity": 0,
+            "humidity": 80,
+            "precipitationProbability": 0,
+            "pressureSeaLevel": 1020.69,
+            "pressureSurfaceLevel": 1019.58,
+            "rainIntensity": 0,
+            "sleetIntensity": 0,
+            "snowIntensity": 0,
+            "temperature": 10.2,
+            "temperatureApparent": 10.2,
+            "visibility": 16,
+            "weatherCode": 1001,
+            "windDirection": 262,
+            "windGust": 6.8,
+            "windSpeed": 3.6
+        }
+    },
+    "location": {
+        "lat": -33.8890380859375,
+        "lon": 151.2050323486328,
+        "name": "Council of the City of Sydney, New South Wales, Australia",
+        "type": "administrative"
+    }
+}
