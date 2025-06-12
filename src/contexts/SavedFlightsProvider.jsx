@@ -8,12 +8,15 @@ const SavedFlightsProvider = ({ children }) => {
     // Lifted saved flights states (from useSavedFlights hook)
     const [savedFlights, setSavedFlights] = useState(new Set());
     const [savingFlights, setSavingFlights] = useState(new Set());
+    const [error, setError] = useState(null);
 
     const value = {
         savedFlights,
         setSavedFlights,
         savingFlights,
         setSavingFlights,
+        error,
+        setError,
     };
 
     return (
