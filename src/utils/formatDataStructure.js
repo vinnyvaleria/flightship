@@ -16,7 +16,7 @@ const formatDataStructure = (flightData) => {
         );
         console.log("Format Airtable data :", allFlights);
 
-        return allFlights[0];
+        return allFlights;
     }
 
     // flight api
@@ -38,7 +38,7 @@ const formatDataStructure = (flightData) => {
         return [flightData]; // Already normalized
     }
 
-    console.warn("Unknown data source format");
+    // console.warn("Unknown data source format");
     return [];
 };
 
