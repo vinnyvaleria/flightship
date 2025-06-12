@@ -181,27 +181,30 @@ const FlightCard = ({
                     </Flex>
 
                     {/* Layover Info */}
-                    {hasLayover && (
-                        <Box
-                            bg="gray.500"
-                            p="3"
-                            borderRadius="md"
-                            color="black"
-                            textAlign="center"
-                        >
-                            <Text fontSize="sm">
-                                <Text as="span" fontWeight="bold">
-                                    {flightData.layovers[0].duration_label}{" "}
-                                    Layover :
-                                </Text>{" "}
-                                {flightData.layovers[0].city}
-                            </Text>
-                            <Text as="span" fontSize="xs">
-                                {flightData.layovers[0].airport_name} (
-                                {flightData.layovers[0].airport_code})
-                            </Text>
-                        </Box>
-                    )}
+                    {hasLayover &&
+                        flightData.layovers.map((layover, index) => {
+                            return (
+                                <Box
+                                    key={index}
+                                    bg="gray.500"
+                                    p="3"
+                                    borderRadius="md"
+                                    color="black"
+                                    textAlign="center"
+                                >
+                                    <Text fontSize="sm">
+                                        <Text as="span" fontWeight="bold">
+                                            {layover.duration_label} Layover :
+                                        </Text>{" "}
+                                        {layover.city}
+                                    </Text>
+                                    <Text as="span" fontSize="xs">
+                                        {layover.airport_name} (
+                                        {layover.airport_code})
+                                    </Text>
+                                </Box>
+                            );
+                        })}
                 </Box>
             </Card.Body>
 
