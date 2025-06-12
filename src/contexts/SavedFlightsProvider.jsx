@@ -9,6 +9,7 @@ const SavedFlightsProvider = ({ children }) => {
     const [flightRecords, setFlightRecords] = useState([]);
     const [savedFlights, setSavedFlights] = useState(new Set());
     const [savingFlights, setSavingFlights] = useState(new Set());
+    const [deletingFlights, setDeletingFlights] = useState(new Set());
 
     // state for processing
     const [error, setError] = useState(null);
@@ -21,6 +22,8 @@ const SavedFlightsProvider = ({ children }) => {
         setSavedFlights,
         savingFlights,
         setSavingFlights,
+        deletingFlights,
+        setDeletingFlights,
         error,
         setError,
         loading,

@@ -24,6 +24,8 @@ const useSavedFlights = (searchFormData) => {
         setSavedFlights,
         savingFlights,
         setSavingFlights,
+        deletingFlights,
+        setDeletingFlights,
         error,
         setError,
         loading,
@@ -54,6 +56,8 @@ const useSavedFlights = (searchFormData) => {
         try {
             // console.log("bookingID :", bookingID);
             let airtableData = await getSavedFlightByID(bookingID);
+
+            // console.log("Saved Flight data based on booking id:", airtableData);
 
             if (airtableData.records.length > 0) {
                 setError(
@@ -210,14 +214,59 @@ const useSavedFlights = (searchFormData) => {
         }
     };
 
+    // function to delete flight
+    // https://airtable.com/developers/web/api/delete-record
+    const deleteFlight = async (bookingID) => {
+        // clear existing errors
+        setError(null);
+
+        const airtableData = await getSavedFlightByID(bookingID);
+        const recordId = airtableData.records[0].id;
+        // console.log("Deleting record ID :", recordId);
+
+        // if the booking id is found in the deleting flights array, retun nothing
+        if (deletingFlights.has(recordId)) return;
+
+        // set the list of deleted flights
+        setDeletingFlights((prev) => new Set(prev).add(recordId));
+
+        try {
+            const url = `${AIRTABLE_URL}/${BASE_ID}/${TABLE_ID}/${recordId}`;
+
+            const res = await fetch(url, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${TOKEN}`,
+                },
+            });
+
+            if (!res.ok) {
+                const errorData = await res.json();
+                console.error("Airtable Error:", errorData);
+                throw new Error(`Airtable Error: ${errorData.error?.message}`);
+            }
+        } catch (err) {
+            setError(err.message);
+        }
+
+        // console.log("Flight Records :", flightRecords);
+        // update flightRecords state
+        setFlightRecords((prev) => ({
+            ...prev,
+            records: prev.records.filter((record) => record.id !== recordId),
+        }));
+    };
+
     return {
         flightRecords,
         savedFlights,
         savingFlights,
+        deletingFlights,
         error,
         loading,
         getFlights,
         saveFlight,
+        deleteFlight,
     };
 };
 

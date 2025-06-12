@@ -8,6 +8,7 @@ import { Card, Avatar, Button, Text, Flex, Box, Badge } from "@chakra-ui/react";
 const FlightCard = ({
     flightData,
     onSaveFlight,
+    onDeleteFlight,
     isLoading = false,
     isSaved = false,
     error = false,
@@ -201,17 +202,34 @@ const FlightCard = ({
                 display="block"
             >
                 <Flex justifyContent="flex-end" alignItems="center">
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => onSaveFlight(flightData)}
-                        loading={isLoading}
-                        loadingText="Saving..."
-                        disabled={isSaved || error}
-                        cursor={isSaved || error ? "not-allowed" : "pointer"}
-                    >
-                        Save Flight
-                    </Button>
+                    {onSaveFlight && (
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => onSaveFlight(flightData)}
+                            loading={isLoading}
+                            loadingText="Saving..."
+                            disabled={isSaved || error}
+                            cursor={
+                                isSaved || error ? "not-allowed" : "pointer"
+                            }
+                        >
+                            Save Flight
+                        </Button>
+                    )}
+                    {onDeleteFlight && (
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() =>
+                                onDeleteFlight(flightData.booking_id)
+                            }
+                            loading={isLoading}
+                            loadingText="Deleting..."
+                        >
+                            Delete Flight
+                        </Button>
+                    )}
                 </Flex>
             </Card.Footer>
         </Card.Root>

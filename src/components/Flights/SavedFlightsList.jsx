@@ -11,12 +11,11 @@ const SavedFlightsList = ({ searchFormData }) => {
     // use the save flight hook to get data
     const {
         flightRecords,
-        savedFlights,
-        savingFlights,
+        deletingFlights,
         error,
         loading,
         getFlights,
-        saveFlight,
+        deleteFlight,
     } = useSavedFlights(searchFormData) || {};
 
     const allFlights = formatDataStructure(flightRecords);
@@ -42,17 +41,15 @@ const SavedFlightsList = ({ searchFormData }) => {
 
             <SimpleGrid columns={{ base: 1, md: 2 }} gap={6}>
                 {flightsToRender.map((flight, id) => {
-                    const flightId = flight.booking_token || id;
-                    const isLoading = savingFlights.has(flightId);
-                    const isSaved = savedFlights.has(flightId);
+                    const flightId = flight.booking_id || id;
+                    const isLoading = deletingFlights.has(flightId);
 
                     return (
                         <FlightCard
                             key={flightId}
                             flightData={flight}
-                            onSaveFlight={saveFlight}
+                            onDeleteFlight={deleteFlight}
                             isLoading={isLoading}
-                            isSaved={isSaved}
                             error={error}
                         />
                     );
