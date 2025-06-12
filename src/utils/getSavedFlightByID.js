@@ -8,8 +8,9 @@ const getSavedFlightByID = async (bookingID) => {
 
     // if empty, return none
     if (!bookingID) return null;
+    // console.log("bookingID :", bookingID);
 
-    const url = `${AIRTABLE_URL}/${BASE_ID}/${TABLE_ID}?filterByFormula=SEARCH("${bookingID}", bookingID)`;
+    const url = `${AIRTABLE_URL}/${BASE_ID}/${TABLE_ID}?filterByFormula=SEARCH("${bookingID}", booking_id)`;
 
     try {
         const res = await fetch(url, {
