@@ -11,12 +11,12 @@ import * as flightScheduledService from "./services/flightScheduleService";
 
 import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
+import SavedFlightsProvider from "./contexts/SavedFlightsProvider";
 
 const App = () => {
     // state variable for list of flights saved based on search
     const [flightsData, setFlightsData] = useState([]);
     const [displayedFlights, setDisplayedFlights] = useState([]);
-    const [savedFlights, setSavedFlights] = useState([]);
 
     // state variable to store search term
     const [newFlightSearch, setNewFlightSearch] = useState({
@@ -28,10 +28,11 @@ const App = () => {
         arrivalIATA: "",
         apiKey: "",
     });
+
     // store submitted search
     const [submittedSearchData, setSubmittedSearchData] = useState(null);
     const temporaryFormData = {
-        bookingId: "ABC321",
+        bookingId: "HADEH",
         departureDate: "2025-06-26",
         departure: "Singapore - Singapore Changi Airport (SIN)",
         departureIATA: "SIN",
@@ -89,35 +90,39 @@ const App = () => {
     return (
         <>
             <NavBar />
-
-            <Routes>
-                <Route
-                    path="/"
-                    element={
-                        <main>
-                            <FlightSearch
-                                newFlightSearch={newFlightSearch}
-                                setNewFlightSearch={setNewFlightSearch}
-                                fetch={fetchFlightsData}
-                            />
-                            {/* <FlightsList searchFormData={submittedSearchData} /> */}
-                            {displayedFlights && (
-                                <FlightsList
-                                    // flights={displayedFlights}
-                                    searchFormData={temporaryFormData}
+            <SavedFlightsProvider>
+                <Routes>
+                    <Route
+                        path="/"
+                        element={
+                            <main>
+                                <FlightSearch
+                                    newFlightSearch={newFlightSearch}
+                                    setNewFlightSearch={setNewFlightSearch}
+                                    fetch={fetchFlightsData}
                                 />
-                            )}
-                        </main>
-                    }
-                />
+                                {/* <FlightsList searchFormData={submittedSearchData} /> */}
+                                {displayedFlights && (
+                                    <FlightsList
+                                        // flights={displayedFlights}
+                                        searchFormData={temporaryFormData}
+                                    />
+                                )}
+                            </main>
+                        }
+                    />
 
-                <Route path="/saved-flights" element={<SavedFlightsList />} />
+                    <Route
+                        path="/saved-flights"
+                        element={<SavedFlightsList />}
+                    />
 
-                <Route
-                    path="/saved-flights:bookingId"
-                    element={<FlightsDetails />}
-                />
-            </Routes>
+                    <Route
+                        path="/saved-flights:bookingId"
+                        element={<FlightsDetails />}
+                    />
+                </Routes>
+            </SavedFlightsProvider>
         </>
     );
 };
