@@ -72,6 +72,7 @@ const transformAirtableData = (airtableRecord) => {
             airport_name: layover.airportName,
             airport_code: layover.airportCode,
         })),
+        message: fields.message,
     };
 };
 

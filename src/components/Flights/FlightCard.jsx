@@ -3,7 +3,17 @@
 import formatDate from "@/utils/formatDate";
 import formatTimeToString from "@/utils/formatTimetoString";
 
-import { Card, Avatar, Button, Text, Flex, Box, Badge } from "@chakra-ui/react";
+import {
+    Card,
+    Avatar,
+    Button,
+    Text,
+    Flex,
+    Box,
+    Badge,
+    Blockquote,
+    Float,
+} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import WeatherFlex from "../Weather/WeatherFlex";
 
@@ -36,7 +46,11 @@ const FlightCard = ({
     };
 
     return (
-        <Card.Root variant="elevated" w={custom ? "unset" : "480px"}>
+        <Card.Root
+            variant="elevated"
+            w={custom ? "unset" : "480px"}
+            maxW={custom ? "550px" : "inherit"}
+        >
             <Card.Body p="5">
                 {/* Booking id */}
                 {flightData.booking_id && !custom && (
@@ -213,6 +227,26 @@ const FlightCard = ({
                                 </Box>
                             );
                         })}
+
+                    {flightData.message && weatherData && (
+                        <Blockquote.Root
+                            variant="plain"
+                            colorPalette="pink"
+                            color="lightpink"
+                            mt={5}
+                        >
+                            <Float
+                                placement="top-start"
+                                offsetY="2"
+                                offsetX="2"
+                            >
+                                <Blockquote.Icon />
+                            </Float>
+                            <Blockquote.Content ml={2}>
+                                {flightData.message}
+                            </Blockquote.Content>
+                        </Blockquote.Root>
+                    )}
                 </Box>
             </Card.Body>
 
@@ -251,6 +285,25 @@ const FlightCard = ({
                                     View More
                                 </Button>
                             )}
+
+                            {weatherData &&
+                                (flightData.message ? (
+                                    <Button
+                                        variant="surface"
+                                        size="sm"
+                                        colorPalette="pink"
+                                    >
+                                        Edit Message
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        variant="surface"
+                                        size="sm"
+                                        colorPalette="pink"
+                                    >
+                                        Add Message
+                                    </Button>
+                                ))}
 
                             <Button
                                 variant="outline"

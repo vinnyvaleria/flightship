@@ -8,15 +8,7 @@ import getSavedFlightByID from "@/utils/getSavedFlightByID";
 import formatDataStructure from "@/utils/formatDataStructure";
 import getMapDisplay from "@/utils/getMapDisplay";
 
-import {
-    Box,
-    Button,
-    Text,
-    Badge,
-    Flex,
-    Heading,
-    Highlight,
-} from "@chakra-ui/react";
+import { Box, Button, Text, Badge, Flex, Heading } from "@chakra-ui/react";
 
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
