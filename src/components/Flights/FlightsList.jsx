@@ -4,11 +4,11 @@ import FlightCard from "./FlightCard";
 import useSavedFlights from "@/hooks/useSavedFlights";
 import formatDataStructure from "@/utils/formatDataStructure";
 
-import flights from "@/data/flights.json";
+// import flights from "@/data/flights.json";
 
 import { Collapsible, Flex, Mark, SimpleGrid, Text } from "@chakra-ui/react";
 
-const FlightsList = ({ searchFormData }) => {
+const FlightsList = ({ searchFormData, flights }) => {
     // initialize allFlights as an empty array by default
     let allFlights = [];
 
@@ -32,8 +32,10 @@ const FlightsList = ({ searchFormData }) => {
                         <Flex gap={5} flexDirection="column" mt="20px">
                             <Text>
                                 There are{" "}
-                                <Mark variant="solid">{allFlights.length} flight(s)</Mark>{" "}
-                                 found.
+                                <Mark variant="solid">
+                                    {allFlights.length} flight(s)
+                                </Mark>{" "}
+                                found.
                             </Text>
 
                             <SimpleGrid columns={{ base: 1, md: 2 }} gap={6}>

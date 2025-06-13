@@ -33,15 +33,15 @@ const App = () => {
 
     // store submitted search
     const [submittedSearchData, setSubmittedSearchData] = useState(null);
-    const temporaryFormData = {
-        bookingId: "BEI233",
-        departureDate: "2025-06-26",
-        departure: "Singapore - Singapore Changi Airport (SIN)",
-        departureIATA: "SIN",
-        arrival: "Sydney - Sydney Kingsford Smith International Airport (SYD)",
-        arrivalIATA: "SYD",
-        apiKey: "This is test only",
-    };
+    // const temporaryFormData = {
+    //     bookingId: "BEI233",
+    //     departureDate: "2025-06-26",
+    //     departure: "Singapore - Singapore Changi Airport (SIN)",
+    //     departureIATA: "SIN",
+    //     arrival: "Sydney - Sydney Kingsford Smith International Airport (SYD)",
+    //     arrivalIATA: "SYD",
+    //     apiKey: "This is test only",
+    // };
 
     // since API is fetch asynchronously, display Loading if needed
     const [fLoading, setFLoading] = useState(true);
@@ -113,19 +113,20 @@ const App = () => {
                                             }
                                             fetch={fetchFlightsData}
                                         />
-                                        {displayedFlights && (
-                                            // (fLoading ? (
-                                            //     <Spinner size="sm" />
-                                            // ) :
-
-                                            <FlightsList
-                                                flights={displayedFlights}
-                                                searchFormData={
-                                                    temporaryFormData
-                                                }
-                                                // searchFormData={submittedSearchData}
-                                            />
-                                        )}
+                                        {displayedFlights &&
+                                            (fLoading ? (
+                                                <Spinner size="sm" />
+                                            ) : (
+                                                <FlightsList
+                                                    flights={displayedFlights}
+                                                    // searchFormData={
+                                                    //     temporaryFormData
+                                                    // }
+                                                    searchFormData={
+                                                        submittedSearchData
+                                                    }
+                                                />
+                                            ))}
                                     </main>
                                 }
                             />
