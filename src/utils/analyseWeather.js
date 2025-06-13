@@ -1,4 +1,4 @@
-// src/utils/analyseWeather
+// src/utils/analyseWeather.js
 
 const analyseWeather = (response) => {
     const values = response?.data?.values || {};
