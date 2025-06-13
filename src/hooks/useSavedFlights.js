@@ -293,6 +293,7 @@ const useSavedFlights = (searchFormData) => {
             setUpdatingFlights((prev) => new Set(prev).add(recordId));
 
             const existingMessage = airtableData.records[0].fields?.message;
+            // console.log("Existing message available? ", existingMessage);
 
             // added new field last_updated in airtable
             const updateRecord = {
@@ -305,7 +306,7 @@ const useSavedFlights = (searchFormData) => {
             const url = `${AIRTABLE_URL}/${BASE_ID}/${TABLE_ID}/${recordId}`;
 
             const res = await fetch(url, {
-                method: existingMessage ? "PATCH" : "POST",
+                method: existingMessage === undefined ? "PATCH" : "POST",
                 headers: {
                     Authorization: `Bearer ${TOKEN}`,
                     "Content-Type": "application/json",
