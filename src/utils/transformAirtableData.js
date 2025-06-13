@@ -14,7 +14,7 @@ const transformAirtableData = (airtableRecord) => {
     try {
         flightNumbers = JSON.parse(fields.flight_numbers || "[]");
     } catch (error) {
-        console.warn("Error parsing flight_numbers:", error);
+        // console.warn("Error parsing flight_numbers:", error);
         // Fallback: create a single flight entry if parsing fails
         flightNumbers = [
             {
@@ -29,7 +29,7 @@ const transformAirtableData = (airtableRecord) => {
     try {
         layoverDetails = JSON.parse(fields.layover_details || "[]");
     } catch (error) {
-        console.warn("Error parsing layover_details:", error);
+        // console.warn("Error parsing layover_details:", error);
         layoverDetails = [];
     }
 

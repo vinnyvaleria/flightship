@@ -27,7 +27,7 @@ const getAirportByIATA = async (iata) => {
         // since iata is the primary field, only need the first item
         return data.records[0] || null;
     } catch (error) {
-        console.error("getAirportByIATA error:", error);
+        // console.error("getAirportByIATA error:", error);
         return null;
     }
 };

@@ -29,7 +29,7 @@ const getSavedFlightByID = async (bookingID) => {
         // since booking_id is the primary field, only need the first item
         return data;
     } catch (error) {
-        console.error("getSavedFlightByID error:", error);
+        // console.error("getSavedFlightByID error:", error);
         return null;
     }
 };
