@@ -2,6 +2,8 @@
 
 **Flightship** is a personalized long-distance travel assistant designed to help users track flights, check travel weather, and save meaningful journey notes. Built with React and Vite, the app combines real-time APIs and embedded maps to support relationships across distance.
 
+![Flightship](/src/assets/images/flightship-app.png)
+
 ## 🎯 Project Objective
 
 To create a web application that simplifies flight tracking and planning — especially for people in long-distance relationships. The app allows users to:
@@ -88,6 +90,7 @@ Visit http://localhost:5173 to launch the app locally.
 
 ## 🙌 References and Credits
 
+-   Flightship Logo: My sister [Ver](https://www.instagram.com/vervivre/)
 -   Airports Dataset: [OpenFlights](https://nginx.openflights.org/data.php#airport)
 -   Map Service: [Leaflet](https://leafletjs.com/)
 -   Weather API: [Tomorrow.io](https://www.tomorrow.io/)
