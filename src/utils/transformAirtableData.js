@@ -13,8 +13,8 @@ const transformAirtableData = (airtableRecord) => {
     let flightNumbers = [];
     try {
         flightNumbers = JSON.parse(fields.flight_numbers || "[]");
-    } catch (error) {
-        // console.warn("Error parsing flight_numbers:", error);
+    } catch (err) {
+        console.warn("Error parsing flight_numbers:", err);
         // Fallback: create a single flight entry if parsing fails
         flightNumbers = [
             {
