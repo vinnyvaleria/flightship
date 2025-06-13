@@ -4,7 +4,7 @@ import SearchInput from "../SearchInput/SearchInput";
 import useAirportSuggestions from "@/hooks/useAirportSuggestions";
 
 import { useState } from "react";
-import { Button, Stack, Text } from "@chakra-ui/react";
+import { Button, Heading, Highlight, Stack, Text } from "@chakra-ui/react";
 
 const FlightSearch = ({ newFlightSearch, setNewFlightSearch, fetch }) => {
     // state to control when to show suggestions
@@ -122,8 +122,16 @@ const FlightSearch = ({ newFlightSearch, setNewFlightSearch, fetch }) => {
 
     return (
         <>
+            <Heading as="h3" mb={4}>
+                <Highlight
+                    query={["Search"]}
+                    styles={{ px: "0.5", bg: "teal.muted" }}
+                >
+                    Search your next flight!
+                </Highlight>
+            </Heading>
             <form onSubmit={handleSubmit}>
-                <Stack gap="4" mb="50px">
+                <Stack gap="4" mb="50px" minW="500px" width="80vw" maxW="1000px" justifySelf="center">
                     <SearchInput
                         label="booking number"
                         name="bookingId"

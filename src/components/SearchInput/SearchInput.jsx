@@ -26,7 +26,6 @@ const SearchInput = ({
                 value={value}
                 onChange={onChange}
                 variant="subtle"
-                width="500px"
                 required
             />
 
