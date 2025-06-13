@@ -4,7 +4,15 @@ import FlightCard from "./FlightCard";
 import useSavedFlights from "@/hooks/useSavedFlights";
 import formatDataStructure from "@/utils/formatDataStructure";
 
-import { SimpleGrid, Text } from "@chakra-ui/react";
+import {
+    Flex,
+    Heading,
+    Highlight,
+    Mark,
+    SimpleGrid,
+    Spinner,
+    Text,
+} from "@chakra-ui/react";
 import { useEffect } from "react";
 
 const SavedFlightsList = () => {
@@ -30,36 +38,53 @@ const SavedFlightsList = () => {
         }
     }, []); // empty dependency array to run only once
 
-    if (loading) return <Text>Loading...</Text>;
+    if (loading) return <Spinner size="sm" />;
     if (error) return <Text color="red.500">{error}</Text>;
 
     return (
         <>
+            <Heading as="h3">
+                <Highlight
+                    query={["saved flights"]}
+                    styles={{ px: "0.5", bg: "teal.muted" }}
+                >
+                    You are currently viewing your saved flights!
+                </Highlight>
+            </Heading>
+
             {flightsToRender.length > 0 && (
-                <p>{flightsToRender?.length} flights found.</p>
+                <Flex gap={5} mt="20px" flexDirection="column">
+                    <Text>
+                        There are{" "}
+                        <Mark variant="solid">
+                            {flightsToRender?.length} flight(s)
+                        </Mark>{" "}
+                        found.
+                    </Text>
+                    <SimpleGrid columns={{ base: 1, md: 2 }} gap={6}>
+                        {flightsToRender.map((flight, id) => {
+                            const flightId = flight.booking_id || id;
+                            const isLoading =
+                                flightId && deletingFlights.has(flightId);
+                            const isDeleted = false;
+
+                            return (
+                                <FlightCard
+                                    key={flightId}
+                                    flightData={flight}
+                                    onDeleteFlight={deleteFlight}
+                                    isLoading={isLoading}
+                                    isDeleted={isDeleted}
+                                    error={error}
+                                />
+                            );
+                        })}
+                    </SimpleGrid>
+                </Flex>
             )}
 
-            <SimpleGrid columns={{ base: 1, md: 2 }} gap={6}>
-                {flightsToRender.map((flight, id) => {
-                    const flightId = flight.booking_id || id;
-                    const isLoading = flightId && deletingFlights.has(flightId);
-                    const isDeleted = false;
-
-                    return (
-                        <FlightCard
-                            key={flightId}
-                            flightData={flight}
-                            onDeleteFlight={deleteFlight}
-                            isLoading={isLoading}
-                            isDeleted={isDeleted}
-                            error={error}
-                        />
-                    );
-                })}
-            </SimpleGrid>
-
             {!loading && flightsToRender.length === 0 && (
-                <Text>No flights found.</Text>
+                <Text>No flight found.</Text>
             )}
         </>
     );

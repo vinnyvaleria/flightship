@@ -36,8 +36,8 @@ const FlightCard = ({
     };
 
     return (
-        <Card.Root variant="elevated" w={custom ? "unset" : "500px"}>
-            <Card.Body p="6">
+        <Card.Root variant="elevated" w={custom ? "unset" : "480px"}>
+            <Card.Body p="5">
                 {/* Booking id */}
                 {flightData.booking_id && !custom && (
                     <Badge
@@ -113,7 +113,7 @@ const FlightCard = ({
                             </Text>
                             <Box position="relative" mb="2">
                                 <Box
-                                    height="2px"
+                                    height="3px"
                                     bg="gray.300"
                                     position="relative"
                                 >

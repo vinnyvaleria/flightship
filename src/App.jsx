@@ -14,7 +14,7 @@ import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 
 import "./App.css";
-import { Spinner } from "@chakra-ui/react";
+import { Flex, Separator, Spinner } from "@chakra-ui/react";
 
 const App = () => {
     // state variable for list of flights saved based on search
@@ -90,23 +90,34 @@ const App = () => {
 
     return (
         <>
-            <NavBar />
-            <WeatherProvider>
-                <SavedFlightsProvider>
-                    <Routes>
-                        <Route
-                            path="/"
-                            element={
-                                <main>
-                                    <FlightSearch
-                                        newFlightSearch={newFlightSearch}
-                                        setNewFlightSearch={setNewFlightSearch}
-                                        fetch={fetchFlightsData}
-                                    />
-                                    {displayedFlights &&
-                                        (fLoading ? (
-                                            <Spinner size="sm" />
-                                        ) : (
+            <Flex flexDirection="column">
+                <NavBar />
+                <Separator
+                    variant="solid"
+                    borderColor="white"
+                    size="lg"
+                    marginY="50px"
+                    width="1000px"
+                />
+                <WeatherProvider>
+                    <SavedFlightsProvider>
+                        <Routes>
+                            <Route
+                                path="/"
+                                element={
+                                    <main>
+                                        <FlightSearch
+                                            newFlightSearch={newFlightSearch}
+                                            setNewFlightSearch={
+                                                setNewFlightSearch
+                                            }
+                                            fetch={fetchFlightsData}
+                                        />
+                                        {displayedFlights && (
+                                            // (fLoading ? (
+                                            //     <Spinner size="sm" />
+                                            // ) :
+
                                             <FlightsList
                                                 flights={displayedFlights}
                                                 searchFormData={
@@ -114,23 +125,24 @@ const App = () => {
                                                 }
                                                 // searchFormData={submittedSearchData}
                                             />
-                                        ))}
-                                </main>
-                            }
-                        />
+                                        )}
+                                    </main>
+                                }
+                            />
 
-                        <Route
-                            path="/saved-flights"
-                            element={<SavedFlightsList />}
-                        />
+                            <Route
+                                path="/saved-flights"
+                                element={<SavedFlightsList />}
+                            />
 
-                        <Route
-                            path="/saved-flights/:booking_id"
-                            element={<FlightDetails />}
-                        />
-                    </Routes>
-                </SavedFlightsProvider>
-            </WeatherProvider>
+                            <Route
+                                path="/saved-flights/:booking_id"
+                                element={<FlightDetails />}
+                            />
+                        </Routes>
+                    </SavedFlightsProvider>
+                </WeatherProvider>
+            </Flex>
         </>
     );
 };
