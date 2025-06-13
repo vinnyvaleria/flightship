@@ -20,7 +20,11 @@ const FlightsList = ({ searchFormData }) => {
 
     return (
         <>
-            <p>{allFlights?.length} flights found.</p>
+            {allFlights.length > 0 ? (
+                <p>{allFlights.length} flight(s) found.</p>
+            ) : (
+                <p>No flight found.</p>
+            )}
 
             {/* to show error message from fetching if any */}
             {error && <Text color="red.500">{error}</Text>}

@@ -123,7 +123,7 @@ const FlightSearch = ({ newFlightSearch, setNewFlightSearch, fetch }) => {
     return (
         <>
             <form onSubmit={handleSubmit}>
-                <Stack gap="4">
+                <Stack gap="4" mb="50px">
                     <SearchInput
                         label="booking number"
                         name="bookingId"

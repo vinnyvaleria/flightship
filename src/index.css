@@ -3,6 +3,11 @@
     src: url("./assets/fonts/Heebo-Bold.ttf");
 }
 
+@font-face {
+    font-family: Tex;
+    src: url("./assets/fonts/texgyretermes-bold.otf");
+}
+
 :root {
     font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;
@@ -46,8 +51,8 @@ body {
 }
 
 h1 {
-    font-size: 3.2em;
-    line-height: 1.1;
+    font-size: 3rem;
+    font-family: "Tex";
 }
 
 button {
