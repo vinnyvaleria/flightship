@@ -103,18 +103,17 @@ const App = () => {
                                         setNewFlightSearch={setNewFlightSearch}
                                         fetch={fetchFlightsData}
                                     />
-                                    {displayedFlights &&
-                                        (fLoading ? (
-                                            <Spinner size="sm" />
-                                        ) : (
-                                            <FlightsList
-                                                flights={displayedFlights}
-                                                searchFormData={
-                                                    temporaryFormData
-                                                }
-                                                // searchFormData={submittedSearchData}
-                                            />
-                                        ))}
+                                    {displayedFlights && (
+                                        // (fLoading ? (
+                                        //     <Spinner size="sm" />
+                                        // ) :
+
+                                        <FlightsList
+                                            flights={displayedFlights}
+                                            searchFormData={temporaryFormData}
+                                            // searchFormData={submittedSearchData}
+                                        />
+                                    )}
                                 </main>
                             }
                         />
