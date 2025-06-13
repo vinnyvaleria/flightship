@@ -5,8 +5,10 @@ import formatTimeToString from "@/utils/formatTimetoString";
 
 import { Card, Avatar, Button, Text, Flex, Box, Badge } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import WeatherFlex from "../Weather/WeatherFlex";
 
 const FlightCard = ({
+    weatherData,
     flightData,
     onSaveFlight,
     onDeleteFlight,
@@ -71,10 +73,13 @@ const FlightCard = ({
                 </Flex>
 
                 {/* Flight Time Info */}
-                <Box>
+                <Box mt={3}>
                     <Flex justify="space-between" align="stretch" mb="4">
                         {/* Departure Info */}
                         <Box textAlign="left" flex="1">
+                            {weatherData && (
+                                <WeatherFlex {...weatherData.departure[0]} />
+                            )}
                             <Text fontSize="2xl" fontWeight="bold" mb="1">
                                 {formatTimeToString(
                                     flightInfo.departure_airport.time
@@ -159,7 +164,10 @@ const FlightCard = ({
                         </Box>
 
                         {/* Arrival Info */}
-                        <Box textAlign="right" flex="1">
+                        <Box textAlign="right" flex="1" justifyItems="flex-end">
+                            {weatherData && (
+                                <WeatherFlex {...weatherData.arrival[0]} />
+                            )}
                             <Text fontSize="2xl" fontWeight="bold" mb="1">
                                 {formatTimeToString(
                                     lastFlight.arrival_airport.time

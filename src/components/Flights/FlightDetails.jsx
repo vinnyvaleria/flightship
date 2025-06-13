@@ -2,6 +2,7 @@
 
 import FlightCard from "./FlightCard";
 import useSavedFlights from "@/hooks/useSavedFlights";
+import useWeatherForecast from "@/hooks/useWeatherForecast";
 import getAirportByIATA from "@/utils/getAirportByIATA";
 import getSavedFlightByID from "@/utils/getSavedFlightByID";
 import formatDataStructure from "@/utils/formatDataStructure";
@@ -18,29 +19,57 @@ const FlightDetails = () => {
     const { booking_id } = useParams();
     // console.log("Booking ID from URL :", booking_id);
 
+    // page navigation
     const navigate = useNavigate();
+
+    // store map data
     const mapRef = useRef(null);
 
     // state variable for flight detail
     const [flightDetail, setFlightDetail] = useState(null);
 
+    // state for locations (city names for weather API)
+    const [locations, setLocations] = useState({
+        departure: null,
+        arrival: null,
+    });
+
     const { flightRecords, error, loading, getFlights, deleteFlight } =
         useSavedFlights() || {};
 
-    // retrieve coordinates of all flights within the route
-    const retrieveCoordinates = async () => {
+    // weather hooks for each location - only call when locations are available
+    const departureWeather = useWeatherForecast(locations.departure);
+    const arrivalWeather = useWeatherForecast(locations.arrival);
+
+    // weather data to pass in to FlightCard
+    const weatherData = {
+        departure: [{ location: locations.departure, ...departureWeather }],
+        arrival: [{ location: locations.arrival, ...arrivalWeather }],
+    };
+    // console.log("Weather data after combined :", weatherData);
+
+    // retrieve coordinates and city name of all flights within the route
+    const retrieveFlightData = async () => {
+        // get each flight stop coordinates
         let allCoordinates = [];
+        // get each flight city name
+        let flightLocations = {
+            departure: null,
+            arrival: null,
+        };
 
         const data = await getSavedFlightByID(booking_id);
         const flightData = data.records[0];
         // console.log("getSavedFLightByID data:", flightData);
 
         const departure = await getAirportByIATA(flightData.fields.dep_iata);
+        flightLocations.departure = departure.fields.city;
         allCoordinates.push([
             departure.fields.latitude,
             departure.fields.longtitude,
         ]);
 
+        // loop for more than one layover if any
         if (flightData.fields.hasLayover) {
             const layoverDetails = JSON.parse(
                 flightData.fields.layover_details
@@ -50,7 +79,6 @@ const FlightDetails = () => {
                 layoverDetails.map(async (layover) => {
                     const temp = await getAirportByIATA(layover.airportCode);
                     // console.log("Tempory constant for layover :", temp);
-
                     allCoordinates.push([
                         temp.fields.latitude,
                         temp.fields.longtitude,
@@ -60,6 +88,7 @@ const FlightDetails = () => {
         }
 
         const arrival = await getAirportByIATA(flightData.fields.arr_iata);
+        flightLocations.arrival = arrival.fields.city;
         allCoordinates.push([
             arrival.fields.latitude,
             arrival.fields.longtitude,
@@ -68,7 +97,20 @@ const FlightDetails = () => {
 
         // console.log("All coordinates array :", allCoordinates);
 
+        setLocations(flightLocations);
         return allCoordinates;
+    };
+
+    // when flight is deleted, go back to saved flights
+    const handleDelete = async () => {
+        if (flightDetail && deleteFlight) {
+            await deleteFlight(flightDetail.booking_id);
+            navigate("/saved-flights");
+        }
+    };
+
+    const handleBack = () => {
+        navigate("/saved-flights");
     };
 
     useEffect(() => {
@@ -87,25 +129,13 @@ const FlightDetails = () => {
             setFlightDetail(flight);
             // console.log("Flight detail state:", flightDetail);
 
-            const loadMap = async () => {
-                const allCoordinates = await retrieveCoordinates();
+            const loadMapAndLocations = async () => {
+                const allCoordinates = await retrieveFlightData();
                 getMapDisplay(mapRef.current, allCoordinates);
             };
-            loadMap();
+            loadMapAndLocations();
         }
     }, [flightRecords, booking_id]); // dependent to flight records state and booking_id
-
-    // when flight is deleted, go back to saved flights
-    const handleDelete = async () => {
-        if (flightDetail && deleteFlight) {
-            await deleteFlight(flightDetail.booking_id);
-            navigate("/saved-flights");
-        }
-    };
-
-    const handleBack = () => {
-        navigate("/saved-flights");
-    };
 
     if (loading) return <Text>Loading...</Text>;
     if (error) return <Text color="red.500">{error}</Text>;
@@ -123,6 +153,7 @@ const FlightDetails = () => {
 
     return (
         <>
+            {/* Booking number */}
             <Badge
                 colorPalette="pink"
                 size="lg"
@@ -133,6 +164,7 @@ const FlightDetails = () => {
                 {flightDetail.booking_id}
             </Badge>
 
+            {/* Map display */}
             <Flex
                 id="flightMap"
                 ref={mapRef}
@@ -142,10 +174,12 @@ const FlightDetails = () => {
                 width="100%"
             ></Flex>
 
+            {/* Flight card */}
             <FlightCard
                 flightData={flightDetail}
                 custom={true}
                 onDeleteFlight={handleDelete}
+                weatherData={weatherData}
             />
         </>
     );

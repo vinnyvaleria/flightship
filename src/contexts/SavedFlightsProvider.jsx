@@ -1,4 +1,4 @@
-// src/contexts/SavedFlightsProvider.jsx
+// src/contexts/SavedFlightsProvider.js
 import { createContext, useState } from "react";
 
 // create context for saved flights state
