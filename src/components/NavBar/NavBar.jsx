@@ -1,6 +1,6 @@
 // src/components/NavBar/NavBar.jsx
 
-import flightshipLogo from "../../../public/assets/images/flightship.png";
+import flightshipLogo from "/src/assets/images/flightship.png";
 
 import { Box, Flex, Heading, Image } from "@chakra-ui/react";
 import { Link } from "react-router-dom";

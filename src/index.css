@@ -1,11 +1,11 @@
 @font-face {
     font-family: Heebo;
-    src: url("../public/assets/fonts/Heebo-Bold.ttf");
+    src: url("/src/assets/fonts/Heebo-Bold.ttf");
 }
 
 @font-face {
     font-family: Tex;
-    src: url("../public/assets/fonts/texgyretermes-bold.otf");
+    src: url("/src/assets/fonts/texgyretermes-bold.otf");
 }
 
 :root {

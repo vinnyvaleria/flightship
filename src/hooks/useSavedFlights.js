@@ -306,7 +306,7 @@ const useSavedFlights = (searchFormData) => {
             const url = `${AIRTABLE_URL}/${BASE_ID}/${TABLE_ID}/${recordId}`;
 
             const res = await fetch(url, {
-                method: existingMessage === undefined ? "PATCH" : "POST",
+                method: existingMessage !== "" ? "PATCH" : "POST",
                 headers: {
                     Authorization: `Bearer ${TOKEN}`,
                     "Content-Type": "application/json",
