@@ -286,15 +286,24 @@ const FlightCard = ({
                                 </Button>
                             )}
 
-                            {flightData.message && weatherData && (
-                                <Button
-                                    variant="surface"
-                                    size="sm"
-                                    colorPalette="pink"
-                                >
-                                    Edit Message
-                                </Button>
-                            )}
+                            {weatherData &&
+                                (flightData.message ? (
+                                    <Button
+                                        variant="surface"
+                                        size="sm"
+                                        colorPalette="pink"
+                                    >
+                                        Edit Message
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        variant="surface"
+                                        size="sm"
+                                        colorPalette="pink"
+                                    >
+                                        Add Message
+                                    </Button>
+                                ))}
 
                             <Button
                                 variant="outline"
