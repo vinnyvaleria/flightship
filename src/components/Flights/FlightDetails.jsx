@@ -8,7 +8,15 @@ import getSavedFlightByID from "@/utils/getSavedFlightByID";
 import formatDataStructure from "@/utils/formatDataStructure";
 import getMapDisplay from "@/utils/getMapDisplay";
 
-import { Box, Button, Text, Badge, Flex } from "@chakra-ui/react";
+import {
+    Box,
+    Button,
+    Text,
+    Badge,
+    Flex,
+    Heading,
+    Highlight,
+} from "@chakra-ui/react";
 
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
@@ -154,33 +162,37 @@ const FlightDetails = () => {
     return (
         <>
             {/* Booking number */}
-            <Badge
-                colorPalette="pink"
-                size="lg"
-                w="fit-content"
-                minW="100px"
-                mb={3}
-            >
-                {flightDetail.booking_id}
-            </Badge>
+            <Heading as="h3" mb={5}>
+                Booking number :{" "}
+                <Badge
+                    colorPalette="pink"
+                    size="lg"
+                    w="fit-content"
+                    minW="100px"
+                >
+                    {flightDetail.booking_id}
+                </Badge>
+            </Heading>
 
-            {/* Map display */}
-            <Flex
-                id="flightMap"
-                ref={mapRef}
-                bg="gray.100"
-                borderRadius="6px"
-                height="500px"
-                width="100%"
-            ></Flex>
+            <Box w="fit-content" alignSelf="center">
+                {/* Map display */}
+                <Flex
+                    id="flightMap"
+                    ref={mapRef}
+                    bg="gray.100"
+                    borderRadius="6px"
+                    height="500px"
+                    width="100%"
+                ></Flex>
 
-            {/* Flight card */}
-            <FlightCard
-                flightData={flightDetail}
-                custom={true}
-                onDeleteFlight={handleDelete}
-                weatherData={weatherData}
-            />
+                {/* Flight card */}
+                <FlightCard
+                    flightData={flightDetail}
+                    custom={true}
+                    onDeleteFlight={handleDelete}
+                    weatherData={weatherData}
+                />
+            </Box>
         </>
     );
 };

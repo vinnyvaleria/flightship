@@ -1,5 +1,7 @@
 // src/components/NavBar/NavBar.jsx
 
+import flightshipLogo from "../../../public/assets/images/flightship.png";
+
 import { Box, Flex, Heading, Image } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
@@ -9,7 +11,7 @@ const NavBar = () => {
             <Box as="nav" px={2} color="white" placeItems="center">
                 <Flex gap={2} p={5} alignItems="center">
                     <Image
-                        src="src/assets/images/flightship.png"
+                        src={flightshipLogo}
                         alt="flightship-logo"
                         h="50px"
                         w="fit-content"
