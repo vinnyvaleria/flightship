@@ -7,7 +7,7 @@ import getArrows from "./getArrows";
 // coordinates = [latitude, longitude]
 const getMapDisplay = (mapElementId, coordinates = []) => {
     if (!mapElementId) {
-        console.error("Map container not found.");
+        // console.error("Map container not found.");
         return;
     }
 

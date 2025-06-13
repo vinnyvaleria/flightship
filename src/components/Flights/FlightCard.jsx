@@ -16,6 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import WeatherFlex from "../Weather/WeatherFlex";
+import FlightMessage from "./FlightMessage";
 
 const FlightCard = ({
     weatherData,
@@ -27,6 +28,11 @@ const FlightCard = ({
     isDeleted = false,
     error = false,
     custom = false,
+    onUpdateMessage,
+    isEditing,
+    onEditingMessage,
+    message,
+    setMessage,
 }) => {
     // store the list of flights
     const flightInfo = flightData.flights[0];
@@ -42,6 +48,22 @@ const FlightCard = ({
         const bookingId = flightData.booking_id;
         if (bookingId) {
             navigate(`/saved-flights/${bookingId}`);
+        }
+    };
+
+    const handleAddMessage = () => {
+        onEditingMessage(true);
+        setMessage("");
+    };
+
+    const handleEditMessage = () => {
+        onEditingMessage(true);
+    };
+
+    const handleSaveMessage = () => {
+        if (onUpdateMessage && message.trim()) {
+            onUpdateMessage(flightData.booking_id, message.trim());
+            onEditingMessage(false);
         }
     };
 
@@ -228,24 +250,13 @@ const FlightCard = ({
                             );
                         })}
 
-                    {flightData.message && weatherData && (
-                        <Blockquote.Root
-                            variant="plain"
-                            colorPalette="pink"
-                            color="lightpink"
-                            mt={5}
-                        >
-                            <Float
-                                placement="top-start"
-                                offsetY="2"
-                                offsetX="2"
-                            >
-                                <Blockquote.Icon />
-                            </Float>
-                            <Blockquote.Content ml={2}>
-                                {flightData.message}
-                            </Blockquote.Content>
-                        </Blockquote.Root>
+                    {weatherData && (
+                        <FlightMessage
+                            isEditing={isEditing}
+                            onEditingMessage={onEditingMessage}
+                            message={message}
+                            setMessage={setMessage}
+                        />
                     )}
                 </Box>
             </Card.Body>
@@ -286,24 +297,39 @@ const FlightCard = ({
                                 </Button>
                             )}
 
-                            {weatherData &&
-                                (flightData.message ? (
-                                    <Button
-                                        variant="surface"
-                                        size="sm"
-                                        colorPalette="pink"
-                                    >
-                                        Edit Message
-                                    </Button>
-                                ) : (
-                                    <Button
-                                        variant="surface"
-                                        size="sm"
-                                        colorPalette="pink"
-                                    >
-                                        Add Message
-                                    </Button>
-                                ))}
+                            {weatherData && (
+                                <>
+                                    {isEditing ? (
+                                        <Button
+                                            variant="surface"
+                                            size="sm"
+                                            colorPalette="pink"
+                                            onClick={handleSaveMessage}
+                                            disabled={!message.trim()}
+                                        >
+                                            Save Message
+                                        </Button>
+                                    ) : message ? (
+                                        <Button
+                                            variant="surface"
+                                            size="sm"
+                                            colorPalette="pink"
+                                            onClick={handleEditMessage}
+                                        >
+                                            Edit Message
+                                        </Button>
+                                    ) : (
+                                        <Button
+                                            variant="surface"
+                                            size="sm"
+                                            colorPalette="pink"
+                                            onClick={handleAddMessage}
+                                        >
+                                            Add Message
+                                        </Button>
+                                    )}
+                                </>
+                            )}
 
                             <Button
                                 variant="outline"

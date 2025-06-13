@@ -27,6 +27,8 @@ const FlightDetails = () => {
 
     // state variable for flight detail
     const [flightDetail, setFlightDetail] = useState(null);
+    const [isEditingMessage, setIsEditingMessage] = useState(false);
+    const [messageText, setMessageText] = useState(flightDetail?.message || "");
 
     // state for locations (city names for weather API)
     const [locations, setLocations] = useState({
@@ -34,8 +36,14 @@ const FlightDetails = () => {
         arrival: null,
     });
 
-    const { flightRecords, error, loading, getFlights, deleteFlight } =
-        useSavedFlights() || {};
+    const {
+        flightRecords,
+        error,
+        loading,
+        getFlights,
+        deleteFlight,
+        updateFlightMessage,
+    } = useSavedFlights() || {};
 
     // weather hooks for each location - only call when locations are available
     const departureWeather = useWeatherForecast(locations.departure);
@@ -129,6 +137,8 @@ const FlightDetails = () => {
             setFlightDetail(flight);
             // console.log("Flight detail state:", flightDetail);
 
+            setMessageText(flight?.message || "");
+            // console.log("Flight message state:", messageText);
             const loadMapAndLocations = async () => {
                 const allCoordinates = await retrieveFlightData();
                 getMapDisplay(mapRef.current, allCoordinates);
@@ -183,6 +193,11 @@ const FlightDetails = () => {
                     custom={true}
                     onDeleteFlight={handleDelete}
                     weatherData={weatherData}
+                    onUpdateMessage={updateFlightMessage}
+                    isEditing={isEditingMessage}
+                    onEditingMessage={setIsEditingMessage}
+                    message={messageText}
+                    setMessage={setMessageText}
                 />
             </Box>
         </>
