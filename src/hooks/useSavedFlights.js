@@ -26,6 +26,8 @@ const useSavedFlights = (searchFormData) => {
         setSavingFlights,
         deletingFlights,
         setDeletingFlights,
+        updatingFlights,
+        setUpdatingFlights,
         error,
         setError,
         loading,
@@ -198,7 +200,7 @@ const useSavedFlights = (searchFormData) => {
 
             if (!res.ok) {
                 const errorData = await res.json();
-                console.error("Airtable Error:", errorData);
+                // console.error("Airtable Error:", errorData);
                 throw new Error(`Airtable Error: ${errorData.error?.message}`);
             }
 
@@ -224,7 +226,7 @@ const useSavedFlights = (searchFormData) => {
         const recordId = airtableData.records[0].id;
         // console.log("Deleting record ID :", recordId);
 
-        // if the booking id is found in the deleting flights array, retun nothing
+        // if the booking id is found in the deleting flights array, return nothing
         if (deletingFlights.has(recordId)) return;
 
         // set the list of deleted flights
@@ -242,7 +244,7 @@ const useSavedFlights = (searchFormData) => {
 
             if (!res.ok) {
                 const errorData = await res.json();
-                console.error("Airtable Error:", errorData);
+                // console.error("Airtable Error:", errorData);
                 throw new Error(`Airtable Error: ${errorData.error?.message}`);
             }
         } catch (err) {
@@ -264,6 +266,82 @@ const useSavedFlights = (searchFormData) => {
         }));
     };
 
+    // update message function
+    const updateFlightMessage = async (bookingID, message) => {
+        // clear existing errors
+        setError(null);
+
+        let recordId;
+
+        try {
+            const airtableData = await getSavedFlightByID(bookingID);
+
+            // check if record exists
+            if (!airtableData.records || airtableData.records.length === 0) {
+                throw new Error(
+                    `No record found with booking ID: ${bookingID}`
+                );
+            }
+
+            recordId = airtableData.records[0].id;
+            // console.log("Updating record ID :", recordId);
+
+            // if the booking id is found in the updating flights array, return nothing
+            if (updatingFlights.has(recordId)) return;
+
+            // set the list of updating flights
+            setUpdatingFlights((prev) => new Set(prev).add(recordId));
+
+            const existingMessage = airtableData.records[0].fields?.message;
+
+            // added new field last_updated in airtable
+            const updateRecord = {
+                fields: {
+                    message,
+                    last_updated: new Date().toISOString(),
+                },
+            };
+
+            const url = `${AIRTABLE_URL}/${BASE_ID}/${TABLE_ID}/${recordId}`;
+
+            const res = await fetch(url, {
+                method: existingMessage ? "PATCH" : "POST",
+                headers: {
+                    Authorization: `Bearer ${TOKEN}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(updateRecord),
+            });
+
+            if (!res.ok) {
+                const errorData = await res.json();
+                // console.error("Airtable Error:", errorData);
+                throw new Error(`Airtable Error: ${errorData.error?.message}`);
+            }
+
+            const updatedRecord = await res.json();
+            // console.log("Successfully updated record:", updatedRecord);
+
+            // update flight records
+            setFlightRecords((prev) => ({
+                ...prev,
+                records: prev.records.map((record) =>
+                    record.id === recordId ? updatedRecord : record
+                ),
+            }));
+
+            return updatedRecord;
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setUpdatingFlights((prev) => {
+                const updated = new Set(prev);
+                updated.delete(recordId);
+                return updated;
+            });
+        }
+    };
+
     return {
         flightRecords,
         savedFlights,
@@ -274,6 +352,7 @@ const useSavedFlights = (searchFormData) => {
         getFlights,
         saveFlight,
         deleteFlight,
+        updateFlightMessage,
     };
 };
 
