@@ -7,7 +7,7 @@ const NavBar = () => {
     return (
         <>
             <Box as="nav" px={2} color="white" placeItems="center">
-                <Flex as="ul" gap={3} alignItems="center">
+                <Flex as="ul" gapX={5} alignItems="center">
                     <Box as="li">
                         <Link to="/" className="logo">
                             <Image
