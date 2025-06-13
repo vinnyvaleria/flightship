@@ -14,10 +14,10 @@ import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 
 import "./App.css";
+import { Spinner } from "@chakra-ui/react";
 
 const App = () => {
     // state variable for list of flights saved based on search
-    const [flightsData, setFlightsData] = useState([]);
     const [displayedFlights, setDisplayedFlights] = useState([]);
 
     // state variable to store search term
@@ -58,7 +58,6 @@ const App = () => {
                 formData.apiKey
             );
 
-            setFlightsData(fData);
             setDisplayedFlights(fData);
             setFLoading(false);
 
@@ -104,13 +103,18 @@ const App = () => {
                                         setNewFlightSearch={setNewFlightSearch}
                                         fetch={fetchFlightsData}
                                     />
-                                    {displayedFlights && (
-                                        <FlightsList
-                                            flights={displayedFlights}
-                                            searchFormData={temporaryFormData}
-                                            // searchFormData={submittedSearchData}
-                                        />
-                                    )}
+                                    {displayedFlights &&
+                                        (fLoading ? (
+                                            <Spinner size="sm" />
+                                        ) : (
+                                            <FlightsList
+                                                flights={displayedFlights}
+                                                searchFormData={
+                                                    temporaryFormData
+                                                }
+                                                // searchFormData={submittedSearchData}
+                                            />
+                                        ))}
                                 </main>
                             }
                         />
