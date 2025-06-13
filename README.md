@@ -126,8 +126,10 @@ This project is for personal and educational use. All assets and source code are
 
 ## 📚 What I Learnt
 
--   How to integrate and optimize multiple external APIs in a single user flow
--   Structuring relational data in [Airtable](https://airtable.com/) and syncing it with a React frontend
--   Styling efficiently with [Chakra UI's](https://chakra-ui.com/) component-based system
--   Designing around real-world constraints like API rate limits
--   Building an emotionally meaningful experience with both form and function
+-   How to integrate and optimize multiple external APIs in a single user flow.
+-   Structuring relational data in [Airtable](https://airtable.com/) and syncing it with a React frontend.
+-   Styling efficiently with [Chakra UI's](https://chakra-ui.com/) component-based system.
+-   Designing around real-world constraints like API rate limits.
+-   Building an emotionally meaningful experience with both form and function.
+-   Learned to manage technical scope and simplify logic under constraints.
+-   Reflected on time management: balancing coding, debugging, and planning while juggling work commitments taught me the importance of early milestones and tighter iteration loops.
