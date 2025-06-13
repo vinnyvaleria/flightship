@@ -14,7 +14,7 @@ import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 
 import "./App.css";
-import { Flex, Spinner } from "@chakra-ui/react";
+import { Flex, Separator, Spinner } from "@chakra-ui/react";
 
 const App = () => {
     // state variable for list of flights saved based on search
@@ -92,6 +92,13 @@ const App = () => {
         <>
             <Flex flexDirection="column">
                 <NavBar />
+                <Separator
+                    variant="solid"
+                    borderColor="white"
+                    size="lg"
+                    marginY="50px"
+                    width="1000px"
+                />
                 <WeatherProvider>
                     <SavedFlightsProvider>
                         <Routes>

@@ -6,8 +6,8 @@ import { Link } from "react-router-dom";
 const NavBar = () => {
     return (
         <>
-            <Box as="nav" px={2} mb="50px" color="white" placeItems="center">
-                <Flex gap={2} p={10} alignItems="center">
+            <Box as="nav" px={2} color="white" placeItems="center">
+                <Flex gap={2} p={5} alignItems="center">
                     <Image
                         src="src/assets/images/flightship.png"
                         alt="flightship-logo"

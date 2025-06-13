@@ -48,7 +48,7 @@ const SavedFlightsList = () => {
                     query={["saved flights"]}
                     styles={{ px: "0.5", bg: "teal.muted" }}
                 >
-                    You are currently viwing your saved flights!
+                    You are currently viewing your saved flights!
                 </Highlight>
             </Heading>
 
