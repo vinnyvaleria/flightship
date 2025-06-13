@@ -1,7 +1,7 @@
 // src/utils/analyseWeather
 
-const analyseWeather = (data) => {
-    const values = data?.values || {};
+const analyseWeather = (response) => {
+    const values = response?.data?.values || {};
 
     return {
         // true if the value is higher than 50%
