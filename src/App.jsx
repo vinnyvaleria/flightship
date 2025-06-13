@@ -90,7 +90,7 @@ const App = () => {
 
     return (
         <>
-            <Flex flexDirection="column" gapY="50px">
+            <Flex flexDirection="column">
                 <NavBar />
                 <WeatherProvider>
                     <SavedFlightsProvider>
