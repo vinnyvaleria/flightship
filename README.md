@@ -56,7 +56,7 @@ To create a web application that simplifies flight tracking and planning — esp
 ```bash
 
 # Clone the repository
-git clone https://github.com/yourusername/flightship.git
+git clone https://github.com/vinnyvaleria/flightship.git
 cd flightship
 
 # Install dependencies
