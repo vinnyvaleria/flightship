@@ -28,7 +28,7 @@ const FlightDetails = () => {
     // state variable for flight detail
     const [flightDetail, setFlightDetail] = useState(null);
     const [isEditingMessage, setIsEditingMessage] = useState(false);
-    const [messageText, setMessageText] = useState("");
+    const [messageText, setMessageText] = useState(flightDetail?.message || "");
 
     // state for locations (city names for weather API)
     const [locations, setLocations] = useState({
@@ -137,6 +137,7 @@ const FlightDetails = () => {
             setFlightDetail(flight);
             // console.log("Flight detail state:", flightDetail);
 
+            setMessageText(flight?.message || "");
             // console.log("Flight message state:", messageText);
             const loadMapAndLocations = async () => {
                 const allCoordinates = await retrieveFlightData();

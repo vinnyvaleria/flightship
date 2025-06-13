@@ -8,11 +8,6 @@ const FlightMessage = ({
     message,
     setMessage,
 }) => {
-    // set the edit state to true
-    const handleEdit = () => {
-        onEditingMessage(true);
-    };
-
     // user can cancel edit
     const handleCancel = () => {
         onEditingMessage(false);
