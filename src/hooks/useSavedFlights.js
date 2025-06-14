@@ -1,7 +1,7 @@
 // src/hooks/useSavedFlights.js
 
 import useSavedFlightsContext from "./useSavedFlightsContext";
-import formatDate from "@/utils/formatDate";
+import formatDateUTCtoISO from "@/utils/formatDateUTCtoISO";
 import getAirportByIATA from "@/utils/getAirportByIATA";
 import getSavedFlightByID from "@/utils/getSavedFlightByID";
 
@@ -155,16 +155,14 @@ const useSavedFlights = (searchFormData) => {
                         }))
                     ),
 
-                    dep_date: formatDate(
+                    dep_date_time: formatDateUTCtoISO(
                         flightInfo.departure_airport.time,
-                        "iso"
+                        depAirport.fields.utc
                     ),
-                    dep_time: flightInfo.departure_airport.time,
-                    arr_date: formatDate(
+                    arr_date_time: formatDateUTCtoISO(
                         lastFlight.arrival_airport.time,
-                        "iso"
+                        arrAirport.fields.utc
                     ),
-                    arr_time: lastFlight.arrival_airport.time,
                     duration: flightData.duration.text,
 
                     // extended data added
