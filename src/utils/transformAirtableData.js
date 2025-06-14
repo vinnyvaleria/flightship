@@ -41,12 +41,15 @@ const transformAirtableData = (airtableRecord) => {
         flight_number: flight.flightNumber,
         aircraft: flight.aircraft,
         departure_airport: {
-            time: fields.dep_time,
+            time: fields.dep_date_time,
             airport_code: index === 0 ? fields.dep_iata[0] : null,
             airport_name: index === 0 ? fields.dep_airport[0] : null,
         },
         arrival_airport: {
-            time: index === flightNumbers.length - 1 ? fields.arr_time : null,
+            time:
+                index === flightNumbers.length - 1
+                    ? fields.arr_date_time
+                    : null,
             airport_code:
                 index === flightNumbers.length - 1 ? fields.arr_iata[0] : null,
             airport_name:

@@ -1,22 +1,11 @@
 // src/components/Flights/FlightCard.jsx
 
-import formatDate from "@/utils/formatDate";
-import formatTimeToString from "@/utils/formatTimetoString";
-
-import {
-    Card,
-    Avatar,
-    Button,
-    Text,
-    Flex,
-    Box,
-    Badge,
-    Blockquote,
-    Float,
-} from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+import formatDateUTCtoString from "@/utils/formatDateUTCtoString";
 import WeatherFlex from "../Weather/WeatherFlex";
 import FlightMessage from "./FlightMessage";
+
+import { Card, Avatar, Button, Text, Flex, Box, Badge } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 const FlightCard = ({
     weatherData,
@@ -41,6 +30,19 @@ const FlightCard = ({
     // display details of layovers if any
     const isDirect = flightData.stops === 0;
     const hasLayover = flightData.layovers && flightData.layovers.length > 0;
+
+    // displat time after converting
+    // console.log("Departure time :", flightInfo.departure_airport.time);
+    const [{ date: depDate, time: depTime }] = formatDateUTCtoString(
+        flightInfo.departure_airport.time
+    );
+    // console.log("Departure date and time", depDate, depTime);
+
+    // console.log("Arrival time :", lastFlight.arrival_airport.time);
+    const [{ date: arrDate, time: arrTime }] = formatDateUTCtoString(
+        lastFlight.arrival_airport.time
+    );
+    // console.log("Arrival date and time", arrDate, arrTime);
 
     const navigate = useNavigate();
 
@@ -118,9 +120,7 @@ const FlightCard = ({
                                 mb="1"
                                 whiteSpace="nowrap"
                             >
-                                {formatTimeToString(
-                                    flightInfo.departure_airport.time
-                                )}
+                                {depTime}
                             </Text>
                             <Text fontSize="sm" fontWeight="medium" mb="1">
                                 {flightInfo.departure_airport.airport_code}
@@ -129,10 +129,7 @@ const FlightCard = ({
                                 {flightInfo.departure_airport.airport_name}
                             </Text>
                             <Text fontSize="xs" color="gray.500">
-                                {formatDate(
-                                    flightInfo.departure_airport.time,
-                                    "string"
-                                )}
+                                {depDate}
                             </Text>
                         </Box>
 
@@ -215,9 +212,7 @@ const FlightCard = ({
                                 mb="1"
                                 whiteSpace="nowrap"
                             >
-                                {formatTimeToString(
-                                    lastFlight.arrival_airport.time
-                                )}
+                                {arrTime}
                             </Text>
                             <Text fontSize="sm" fontWeight="medium" mb="1">
                                 {lastFlight.arrival_airport.airport_code}
@@ -226,10 +221,7 @@ const FlightCard = ({
                                 {lastFlight.arrival_airport.airport_name}
                             </Text>
                             <Text fontSize="xs" color="gray.500">
-                                {formatDate(
-                                    lastFlight.arrival_airport.time,
-                                    "string"
-                                )}
+                                {arrDate}
                             </Text>
                         </Box>
                     </Flex>
