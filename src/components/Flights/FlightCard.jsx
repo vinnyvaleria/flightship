@@ -151,7 +151,7 @@ const FlightCard = ({
                             </Text>
                             <Box position="relative" mb="2">
                                 <Box
-                                    height={{ base: "1px", md: "33px" }}
+                                    height={{ base: "1px", md: "3px" }}
                                     bg="gray.300"
                                     position="relative"
                                 >
