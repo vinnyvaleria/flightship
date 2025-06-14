@@ -61,7 +61,7 @@ const SavedFlightsList = () => {
                         </Mark>{" "}
                         found.
                     </Text>
-                    <SimpleGrid columns={{ base: 1, md: 2 }} gap={6}>
+                    <SimpleGrid columns={{ base: 1, md: 1, lg: 2 }} gap={6}>
                         {flightsToRender.map((flight, id) => {
                             const flightId = flight.booking_id || id;
                             const isLoading =

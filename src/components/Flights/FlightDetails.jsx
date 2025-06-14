@@ -183,7 +183,7 @@ const FlightDetails = () => {
                     ref={mapRef}
                     bg="gray.100"
                     borderRadius="6px"
-                    height="500px"
+                    height={{ base: "200px", md: "500px" }}
                     width="100%"
                 ></Flex>
 

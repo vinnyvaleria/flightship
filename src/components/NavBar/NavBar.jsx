@@ -13,12 +13,12 @@ const NavBar = () => {
                     <Image
                         src={flightshipLogo}
                         alt="flightship-logo"
-                        h="50px"
+                        h={{ base: "35px", md: "50px" }}
                         w="fit-content"
                     />
                     <Heading as="h1">Flightship</Heading>
                 </Flex>
-                <Flex as="ul" gapX={5}>
+                <Flex as="ul" gapX={{ base: 2, md: 5 }}>
                     <Box as="li">
                         <Link to="/">Home</Link>
                     </Box>

@@ -68,11 +68,7 @@ const FlightCard = ({
     };
 
     return (
-        <Card.Root
-            variant="elevated"
-            w={custom ? "unset" : "480px"}
-            maxW={custom ? "550px" : "inherit"}
-        >
+        <Card.Root variant="elevated" maxW={custom ? "550px" : "inherit"}>
             <Card.Body p="5">
                 {/* Booking id */}
                 {flightData.booking_id && !custom && (
@@ -116,7 +112,12 @@ const FlightCard = ({
                             {weatherData && (
                                 <WeatherFlex {...weatherData.departure[0]} />
                             )}
-                            <Text fontSize="2xl" fontWeight="bold" mb="1">
+                            <Text
+                                fontSize={{ base: "xl", md: "2xl" }}
+                                fontWeight="bold"
+                                mb="1"
+                                whiteSpace="nowrap"
+                            >
                                 {formatTimeToString(
                                     flightInfo.departure_airport.time
                                 )}
@@ -144,12 +145,16 @@ const FlightCard = ({
                             justifyContent="center"
                             px="4"
                         >
-                            <Text fontSize="sm" color="gray.600" mb="2">
+                            <Text
+                                fontSize={{ base: "10px", sm: "xs", md: "sm" }}
+                                color="gray.600"
+                                mb="2"
+                            >
                                 {flightData.duration.text}
                             </Text>
                             <Box position="relative" mb="2">
                                 <Box
-                                    height="3px"
+                                    height={{ base: "1px", md: "33px" }}
                                     bg="gray.300"
                                     position="relative"
                                 >
@@ -157,9 +162,9 @@ const FlightCard = ({
                                     <Box
                                         position="absolute"
                                         left="0"
-                                        top="-3px"
-                                        w="8px"
-                                        h="8px"
+                                        top={{ base: "-2px", md: "-3px" }}
+                                        w={{ base: "5px", md: "8px" }}
+                                        h={{ base: "5px", md: "8px" }}
                                         bg="blue.500"
                                         borderRadius="full"
                                     />
@@ -167,9 +172,9 @@ const FlightCard = ({
                                     <Box
                                         position="absolute"
                                         right="0"
-                                        top="-3px"
-                                        w="8px"
-                                        h="8px"
+                                        top={{ base: "-2px", md: "-3px" }}
+                                        w={{ base: "5px", md: "8px" }}
+                                        h={{ base: "5px", md: "8px" }}
                                         bg="green.500"
                                         borderRadius="full"
                                     />
@@ -177,7 +182,7 @@ const FlightCard = ({
                             </Box>
                             {!isDirect && (
                                 <Text
-                                    fontSize="xs"
+                                    fontSize={{ base: "10px", md: "xs" }}
                                     color="orange.500"
                                     fontWeight="medium"
                                 >
@@ -190,7 +195,7 @@ const FlightCard = ({
                             )}
                             {isDirect && (
                                 <Text
-                                    fontSize="xs"
+                                    fontSize={{ base: "10px", md: "xs" }}
                                     color="green.600"
                                     fontWeight="medium"
                                 >
@@ -204,7 +209,12 @@ const FlightCard = ({
                             {weatherData && (
                                 <WeatherFlex {...weatherData.arrival[0]} />
                             )}
-                            <Text fontSize="2xl" fontWeight="bold" mb="1">
+                            <Text
+                                fontSize={{ base: "xl", md: "2xl" }}
+                                fontWeight="bold"
+                                mb="1"
+                                whiteSpace="nowrap"
+                            >
                                 {formatTimeToString(
                                     lastFlight.arrival_airport.time
                                 )}

@@ -59,7 +59,7 @@ const App = () => {
             );
 
             setDisplayedFlights(fData);
-            setFLoading(false);
+            setFLoading(true);
 
             // save submitted search data only when fetch is successful
             setSubmittedSearchData(formData);
@@ -96,8 +96,9 @@ const App = () => {
                     variant="solid"
                     borderColor="white"
                     size="lg"
-                    marginY="50px"
-                    width="1000px"
+                    marginY={{ base: "20px", md: "50px" }}
+                    minWidth="80vw"
+                    width="100%"
                 />
                 <WeatherProvider>
                     <SavedFlightsProvider>
@@ -114,7 +115,8 @@ const App = () => {
                                             fetch={fetchFlightsData}
                                         />
                                         {displayedFlights &&
-                                            (fLoading ? (
+                                            (displayedFlights.length > 0 &&
+                                            fLoading ? (
                                                 <Spinner size="sm" />
                                             ) : (
                                                 <FlightsList

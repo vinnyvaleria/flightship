@@ -131,7 +131,14 @@ const FlightSearch = ({ newFlightSearch, setNewFlightSearch, fetch }) => {
                 </Highlight>
             </Heading>
             <form onSubmit={handleSubmit}>
-                <Stack gap="4" mb="50px" minW="500px" width="80vw" maxW="1000px" justifySelf="center">
+                <Stack
+                    gap="4"
+                    mb="50px"
+                    minW={{ base: "200px", md: "500px" }}
+                    width="90vw"
+                    maxW="1000px"
+                    justifySelf="center"
+                >
                     <SearchInput
                         label="booking number"
                         name="bookingId"

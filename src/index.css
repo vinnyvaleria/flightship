@@ -45,10 +45,10 @@ body {
     margin: 0;
     display: flex;
     justify-content: center;
-    min-width: 320px;
     min-height: 100vh;
-    max-width: 100vw;
+    width: 100vw;
     overflow-x: hidden;
+    padding: 1rem;
 }
 
 h1 {
@@ -88,5 +88,16 @@ button:focus-visible {
     }
     button {
         background-color: #f9f9f9;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+    nav a:not(.logo) {
+        font-size: 1rem;
+        background-color: #d14490;
+        padding: 2px 4px;
     }
 }
